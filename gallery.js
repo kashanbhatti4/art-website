@@ -7,7 +7,7 @@
   'use strict';
 
   // ---------------------------------------------------------------------------
-  // 1. 6 Curated Original Artworks by Edel Regan
+  // 1. 6 Curated Original Artworks by Edel Regan (Authentic CSV Data)
   // ---------------------------------------------------------------------------
   const ARTWORKS = [
     {
@@ -18,9 +18,7 @@
       story: 'A sunlit country lane runs past hawthorn in bloom and a field gate, with purple-blue mountains under a wide summer sky.',
       specs: [
         { label: 'Medium', value: 'Oil / acrylic on canvas' },
-        { label: 'Base', value: 'Stretched Linen Canvas' },
-        { label: 'Framing', value: 'Framed (natural oak)' },
-        { label: 'Dimensions', value: '24 × 32 in (61 × 81 cm)' }
+        { label: 'Framing', value: 'Framed (natural oak)' }
       ],
       image: 'images/hawthorn-lane-summer-light.jpg'
     },
@@ -32,9 +30,7 @@
       story: 'An expressive, near-abstract woodland of dark pine branches, dappled light and flickers of lime and pale blue.',
       specs: [
         { label: 'Medium', value: 'Oil / acrylic on canvas' },
-        { label: 'Base', value: 'Stretched Linen Canvas' },
-        { label: 'Framing', value: 'Framed (natural oak)' },
-        { label: 'Dimensions', value: '30 × 24 in (76 × 61 cm)' }
+        { label: 'Framing', value: 'Framed (natural oak)' }
       ],
       image: 'images/through-the-pines.jpg'
     },
@@ -46,9 +42,7 @@
       story: 'White cottages with blue roofs sit on a green headland above dark rocks and a silver Atlantic tide.',
       specs: [
         { label: 'Medium', value: 'Oil / acrylic on canvas' },
-        { label: 'Base', value: 'Stretched Linen Canvas' },
-        { label: 'Framing', value: 'Framed (white)' },
-        { label: 'Dimensions', value: '24 × 36 in (61 × 91 cm)' }
+        { label: 'Framing', value: 'Framed (white)' }
       ],
       image: 'images/cottages-above-the-tide.jpg'
     },
@@ -60,9 +54,7 @@
       story: 'Sunlit sandstone cliffs topped with green fall into a deep blue Atlantic under a soft summer sky.',
       specs: [
         { label: 'Medium', value: 'Oil / acrylic on canvas' },
-        { label: 'Base', value: 'Stretched Linen Canvas' },
-        { label: 'Framing', value: 'Framed (natural oak)' },
-        { label: 'Dimensions', value: '32 × 24 in (81 × 61 cm)' }
+        { label: 'Framing', value: 'Framed (natural oak)' }
       ],
       image: 'images/sunlit-cliffs-west-cork.jpg'
     },
@@ -74,9 +66,7 @@
       story: 'A koi in orange, black and white glides across warm paper, its tail dissolving into flowing blue.',
       specs: [
         { label: 'Medium', value: 'Watercolour on paper' },
-        { label: 'Base', value: 'Heavyweight Fine Art Rag' },
-        { label: 'Framing', value: 'Framed (white, with mount)' },
-        { label: 'Dimensions', value: '22 × 30 in (56 × 76 cm)' }
+        { label: 'Framing', value: 'Framed (white, with mount)' }
       ],
       image: 'images/koi-in-motion.jpg'
     },
@@ -88,9 +78,7 @@
       story: 'A weeping willow leans over still water, glowing in yellow and green washes with deep indigo reflections.',
       specs: [
         { label: 'Medium', value: 'Watercolour on paper' },
-        { label: 'Base', value: 'Heavyweight Fine Art Rag' },
-        { label: 'Framing', value: 'Framed (natural oak)' },
-        { label: 'Dimensions', value: '30 × 22 in (76 × 56 cm)' }
+        { label: 'Framing', value: 'Framed (natural oak)' }
       ],
       image: 'images/willow-at-the-waters-edge.jpg'
     }
@@ -136,6 +124,7 @@
   const btnBack = document.getElementById('btn-back');
   const btnPrev = document.getElementById('btn-prev');
   const btnNext = document.getElementById('btn-next');
+  const btnCollection = document.getElementById('btn-collection');
 
   let currentArtworkIndex = -1;
   let isZoomed = false;
@@ -214,6 +203,9 @@
   function physicsTick(timestamp) {
     const dt = Math.min((timestamp - lastFrameTime) / 1000, 0.08);
     lastFrameTime = timestamp;
+
+    if (world.scrollLeft !== 0) world.scrollLeft = 0;
+    if (world.scrollTop !== 0) world.scrollTop = 0;
 
     if (!isZoomed) {
       // 1. Measured, controlled momentum glide (never shoots away endlessly)
@@ -746,12 +738,8 @@
     sheetPrice.textContent = `€${art.price.toLocaleString('en-US')}`;
     stepCounter.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(ARTWORKS.length).padStart(2, '0')}`;
 
-    // 4 labels: Medium, Paper, Framing, Dimensions (Location and Certificate removed)
-    const filteredSpecs = art.specs.filter(
-      (s) => s.label.toLowerCase() !== 'location' && s.label.toLowerCase() !== 'certificate'
-    );
-
-    sheetSpecs.innerHTML = filteredSpecs
+    // Authentic CSV specs (Medium & Framing)
+    sheetSpecs.innerHTML = art.specs
       .map(
         (s) => `
         <div class="spec-item">
@@ -768,6 +756,9 @@
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   btnBack.addEventListener('click', returnToWall);
+  if (btnCollection) {
+    btnCollection.addEventListener('click', returnToWall);
+  }
   btnPrev.addEventListener('click', () => stepArtwork(-1));
   btnNext.addEventListener('click', () => stepArtwork(1));
 

@@ -110,7 +110,7 @@ body.is-dragging * {
 #world {
   position: fixed;
   inset: 0;
-  overflow: hidden;
+  overflow: clip;
   background-color: #000000;
   background-image: url('images/wall.webp');
   background-size: cover;
@@ -621,6 +621,7 @@ body.in-detail .artwork-sheet {
 .sheet-purchase {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(92, 110, 108, 0.25);
@@ -635,46 +636,119 @@ body.in-detail .artwork-sheet {
   font-weight: 400;
 }
 
+.btn-collection {
+  background: transparent;
+  border: 1px solid rgba(199, 102, 21, 0.5);
+  border-radius: 9999px;
+  padding: 8px 18px;
+  font-family: var(--font-eyebrow);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #D4E4E2;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s var(--ease-smooth);
+  white-space: nowrap;
+}
+
+.btn-collection:hover {
+  background: rgba(199, 102, 21, 0.15);
+  border-color: #C76615;
+  color: #FFFFFF;
+}
+
+.btn-collection .btn-arrow {
+  color: #C76615;
+  font-size: 14px;
+  transition: transform 0.3s var(--ease-smooth);
+}
+
+.btn-collection:hover .btn-arrow {
+  transform: translateX(3px);
+}
+
 .sheet-tax {
   display: none;
 }
 
+/* Glass Button Strip: Floating Rounded Pill Bar */
 .sheet-controls {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  background: rgba(1, 15, 13, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  padding: 7px 12px 7px 18px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  pointer-events: auto;
+  user-select: none;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.65s var(--ease-smooth), transform 0.65s var(--ease-smooth);
+  transition-delay: 0.36s;
+}
+
+.artwork-sheet.show .sheet-controls {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .btn-back {
   background: none;
   border: none;
   font-family: var(--font-eyebrow);
-  font-size: 16px;
-  letter-spacing: 0.04em;
+  font-size: 14px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #D4E4E2;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  transition: color 0.3s, opacity 0.3s;
+  gap: 8px;
   padding: 6px 0;
+  transition: color 0.25s, opacity 0.25s;
+  white-space: nowrap;
 }
 
 .btn-back:hover {
   color: #FFFFFF;
-  opacity: 0.9;
+}
+
+.btn-back-arrow {
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 0.25s var(--ease-smooth);
+}
+
+.btn-back:hover .btn-back-arrow {
+  transform: translateX(-3px);
+}
+
+.pill-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 14px;
+  flex-shrink: 0;
 }
 
 .sheet-stepper {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .step-btn {
-  background: none;
-  border: 1px solid rgba(92, 110, 108, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   color: #D4E4E2;
   width: 32px;
   height: 32px;
@@ -684,22 +758,30 @@ body.in-detail .artwork-sheet {
   cursor: pointer;
   font-size: 16px;
   line-height: 1;
-  transition: background 0.3s, border-color 0.3s, color 0.3s;
+  transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.2s;
   font-family: var(--font-eyebrow);
 }
 
 .step-btn:hover {
-  background: rgba(92, 110, 108, 0.2);
-  border-color: #D4E4E2;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.4);
   color: #FFFFFF;
+  transform: scale(1.05);
+}
+
+.step-btn:active {
+  transform: scale(0.95);
 }
 
 .step-counter {
   font-family: var(--font-eyebrow);
   font-size: 14px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: #5C6E6C;
   font-weight: 500;
+  min-width: 50px;
+  text-align: center;
+  white-space: nowrap;
 }
 
 /* --------------------------------------------------------------------------
@@ -723,17 +805,24 @@ body.in-detail .artwork-sheet {
     top: auto;
     width: 100%;
     transform: none;
-    padding: 38px 20px calc(24px + env(safe-area-inset-bottom));
+    padding: 0;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  .sheet-content {
+    padding: 38px 20px calc(95px + env(safe-area-inset-bottom));
     background: linear-gradient(0deg, #010F0D 85%, rgba(1, 15, 13, 0.95) 95%, transparent);
-    max-height: 54vh;
+    max-height: 56vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 38px, black 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 38px, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 36px, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 36px, black 100%);
+    pointer-events: auto;
   }
 
   .sheet-title {
-    font-size: 36px;
+    font-size: 32px;
   }
 
   .sheet-specs {
@@ -743,8 +832,51 @@ body.in-detail .artwork-sheet {
   }
 
   .sheet-purchase {
+    flex-wrap: wrap;
+    gap: 12px;
     padding-bottom: 14px;
     margin-bottom: 16px;
+  }
+
+  /* Sticky Floating Glass Button Strip on Mobile (Always Visible in Detail Mode) */
+  .sheet-controls {
+    position: fixed;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%) translateY(24px);
+    z-index: 50;
+    width: auto;
+    max-width: calc(100vw - 28px);
+    padding: 7px 12px 7px 16px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth);
+    margin: 0;
+  }
+
+  .artwork-sheet.show .sheet-controls {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+  }
+
+  .btn-back {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+  }
+
+  .pill-divider {
+    margin: 0 10px;
+  }
+
+  .sheet-stepper {
+    gap: 8px;
+  }
+
+  .step-counter {
+    font-size: 13px;
+    min-width: 48px;
   }
 
   .gallery-intro {

@@ -56,17 +56,22 @@
         <div class="sheet-price-box">
           <span class="sheet-price" id="sheet-price"></span>
         </div>
-      </div>
-
-      <div class="sheet-controls">
-        <button type="button" class="btn-back" id="btn-back" aria-label="Return to gallery overview">
-          Back to the wall
+        <button type="button" class="btn-collection" id="btn-collection">
+          See full collection <span class="btn-arrow" aria-hidden="true">→</span>
         </button>
-        <div class="sheet-stepper">
-          <button type="button" class="step-btn" id="btn-prev" aria-label="Previous artwork">‹</button>
-          <span class="step-counter" id="step-counter"></span>
-          <button type="button" class="step-btn" id="btn-next" aria-label="Next artwork">›</button>
-        </div>
+      </div>
+    </div>
+
+    <!-- Glass Button Strip (Back to wall + Stepper, Sticky to bottom on Mobile) -->
+    <div class="sheet-controls" id="sheet-controls">
+      <button type="button" class="btn-back" id="btn-back" aria-label="Return to gallery overview">
+        <span class="btn-back-arrow" aria-hidden="true">←</span> Back to the wall
+      </button>
+      <div class="pill-divider" aria-hidden="true"></div>
+      <div class="sheet-stepper">
+        <button type="button" class="step-btn" id="btn-prev" aria-label="Previous artwork">‹</button>
+        <span class="step-counter" id="step-counter"></span>
+        <button type="button" class="step-btn" id="btn-next" aria-label="Next artwork">›</button>
       </div>
     </div>
   </article>
