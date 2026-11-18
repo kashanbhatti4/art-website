@@ -261,34 +261,32 @@
         }
       }
 
-      // 6. Next Section: Linear Gradient Lead Rises First, Frames Slide Up, followed by Solid #02211D
+      // 6. Next Section: Frames & Gallery Wall Stay Still while Linear Gradient & Solid #02211D Glide Up
       if (nextSection) {
         const leadHeight = Math.round(window.innerHeight * 0.65);
         const initialNextSectionY = window.innerHeight + leadHeight;
 
+        world.style.transform = 'translate3d(0, 0, 0)';
+
         if (currentScroll <= maxScrollX) {
-          world.style.transform = 'translate3d(0, 0, 0)';
           nextSection.style.transform = `translate3d(0, ${initialNextSectionY}px, 0)`;
           nextSection.style.pointerEvents = 'none';
           if (nextSectionInner) nextSectionInner.style.transform = 'translate3d(0, 0, 0)';
         } else {
           const vertOffset = currentScroll - maxScrollX;
           if (vertOffset <= transitionDist) {
-            // First the 65vh linear gradient rises over the wall, while the frames slide up
-            // Then the solid #02211D section arrives to smoothly fill the viewport
+            // Gallery wall and frames stay still while the 65vh linear gradient rises smoothly over them,
+            // seamlessly followed by the solid #02211D section
             const ratio = vertOffset / transitionDist;
             const ease = ratio * (2 - ratio); // liquid smooth deceleration
 
             const nextSectionY = (1 - ease) * initialNextSectionY;
-            const worldTranslateY = ease * window.innerHeight;
 
-            world.style.transform = `translate3d(0, ${-worldTranslateY.toFixed(2)}px, 0)`;
             nextSection.style.transform = `translate3d(0, ${nextSectionY.toFixed(2)}px, 0)`;
             nextSection.style.pointerEvents = ratio > 0.65 ? 'auto' : 'none';
             if (nextSectionInner) nextSectionInner.style.transform = 'translate3d(0, 0, 0)';
           } else {
-            // Transition complete: Gallery is offscreen, solid #02211D section is locked in place with normal vertical scrolling
-            world.style.transform = 'translate3d(0, -100vh, 0)';
+            // Transition complete: Solid #02211D section is locked in place with normal vertical scrolling
             nextSection.style.transform = 'translate3d(0, 0, 0)';
             nextSection.style.pointerEvents = 'auto';
             const contentScrollY = vertOffset - transitionDist;
