@@ -539,15 +539,19 @@ body.in-detail .artwork-sheet {
 
 /* Staggered entrance */
 .artwork-sheet.show .sheet-edition {
-  transition-delay: 0.06s;
+  transition-delay: 0.05s;
 }
 
 .artwork-sheet.show .sheet-title {
-  transition-delay: 0.12s;
+  transition-delay: 0.10s;
 }
 
 .artwork-sheet.show .sheet-story {
-  transition-delay: 0.18s;
+  transition-delay: 0.15s;
+}
+
+.artwork-sheet.show .sheet-divider {
+  transition-delay: 0.20s;
 }
 
 .artwork-sheet.show .sheet-action {
@@ -555,7 +559,7 @@ body.in-detail .artwork-sheet {
 }
 
 .artwork-sheet.show .sheet-controls {
-  transition-delay: 0.30s;
+  transition-delay: 0.28s;
 }
 
 .sheet-edition {
@@ -583,25 +587,37 @@ body.in-detail .artwork-sheet {
   font-size: 16px;
   line-height: 1.6;
   color: #5C6E6C;
-  margin: 0 0 24px 0;
+  margin: 0;
+}
+
+.sheet-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 18px 0;
+  border: none;
+  flex-shrink: 0;
 }
 
 .sheet-action {
-  margin-bottom: 20px;
+  width: 100%;
+  margin: 0;
 }
 
 .btn-collection {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: min(340px, 100%);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   background: rgba(1, 15, 13, 0.82);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 9999px;
-  padding: 12px 24px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  padding: 13px 24px;
+  box-shadow: none;
   font-family: var(--font-eyebrow);
   font-size: 14px;
   font-weight: 500;
@@ -609,42 +625,43 @@ body.in-detail .artwork-sheet {
   text-transform: uppercase;
   color: #D4E4E2;
   cursor: pointer;
-  transition: all 0.3s var(--ease-smooth);
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
   user-select: none;
   white-space: nowrap;
 }
 
 .btn-collection:hover {
-  background: rgba(2, 33, 29, 0.95);
+  background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.35);
   color: #FFFFFF;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75), 0 0 14px rgba(212, 228, 226, 0.12);
-  transform: translateY(-1px);
+  box-shadow: none;
+  transform: none;
 }
 
 .btn-collection:active {
-  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.12);
+  transform: none;
 }
 
 /* Glass Button Strip: Floating Rounded Pill Bar */
 .sheet-controls {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  width: min(340px, 100%);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   background: rgba(1, 15, 13, 0.82);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 9999px;
-  padding: 7px 12px 7px 18px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  padding: 8px 18px 8px 22px;
+  box-shadow: none;
   pointer-events: auto;
   user-select: none;
-  opacity: 0;
-  transform: translateY(18px);
+  margin: 0;
   transition: opacity 0.65s var(--ease-smooth), transform 0.65s var(--ease-smooth);
-  transition-delay: 0.30s;
 }
 
 .artwork-sheet.show .sheet-controls {
@@ -664,7 +681,7 @@ body.in-detail .artwork-sheet {
   display: inline-flex;
   align-items: center;
   padding: 6px 4px;
-  transition: color 0.25s, opacity 0.25s;
+  transition: color 0.25s;
   white-space: nowrap;
 }
 
@@ -694,24 +711,32 @@ body.in-detail .artwork-sheet {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   cursor: pointer;
   font-size: 16px;
   line-height: 1;
-  transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.2s;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
   font-family: var(--font-eyebrow);
+  flex-shrink: 0;
 }
 
 .step-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.4);
   color: #FFFFFF;
-  transform: scale(1.05);
+  box-shadow: none;
+  transform: none;
 }
 
 .step-btn:active {
-  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.18);
+  transform: none;
 }
 
 .step-counter {
@@ -752,57 +777,59 @@ body.in-detail .artwork-sheet {
   }
 
   .sheet-content {
-    padding: 38px 20px calc(95px + env(safe-area-inset-bottom));
-    background: linear-gradient(0deg, #010F0D 85%, rgba(1, 15, 13, 0.95) 95%, transparent);
-    max-height: 56vh;
+    padding: 32px 20px calc(24px + env(safe-area-inset-bottom));
+    background: linear-gradient(0deg, #010F0D 90%, rgba(1, 15, 13, 0.95) 98%, transparent);
+    max-height: 60vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 36px, black 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 36px, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 28px, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 28px, black 100%);
     pointer-events: auto;
   }
 
   .sheet-title {
-    font-size: 32px;
+    font-size: 30px;
+  }
+
+  .sheet-divider {
+    margin: 14px 0;
   }
 
   .sheet-action {
-    margin-top: 22px;
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: center;
+    margin: 0;
+    width: 100%;
+    display: block;
   }
 
   .btn-collection {
-    width: min(340px, 100%);
-    padding: 12px 20px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 12px 18px;
+    font-size: 13px;
   }
 
-  /* Sticky Floating Glass Button Strip on Mobile (Always Visible in Detail Mode) */
+  /* Glass Button Strip on Mobile: Equal Width with Text and Neat Spacing */
   .sheet-controls {
-    position: fixed;
-    bottom: calc(16px + env(safe-area-inset-bottom));
-    left: 50%;
-    transform: translateX(-50%) translateY(24px);
-    z-index: 50;
-    width: auto;
-    max-width: calc(100vw - 28px);
-    padding: 7px 12px 7px 18px;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s var(--ease-smooth), transform 0.4s var(--ease-smooth);
+    position: static;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 7px 14px 7px 18px;
+    box-shadow: none;
+    opacity: 1;
+    pointer-events: auto;
     margin: 0;
   }
 
   .artwork-sheet.show .sheet-controls {
+    transform: none;
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
-    pointer-events: auto;
   }
 
   .btn-back {
-    font-size: 13px;
+    font-size: 12px;
     letter-spacing: 0.08em;
   }
 
@@ -815,8 +842,8 @@ body.in-detail .artwork-sheet {
   }
 
   .step-counter {
-    font-size: 13px;
-    min-width: 48px;
+    font-size: 12px;
+    min-width: 46px;
   }
 
   .gallery-intro {

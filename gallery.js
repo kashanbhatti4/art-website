@@ -307,10 +307,10 @@
           </div>
         </div>
 
-        <!-- Hover Tag / Badge -->
+        <!-- Hover Tag / Badge (Title + Edition, No Price) -->
         <div class="hanger-badge">
           <span class="badge-name">${art.title}</span>
-          <span class="badge-meta">${art.edition.split('·')[0]} · €${art.price}</span>
+          <span class="badge-meta">${art.edition.split('·')[0].trim()}</span>
         </div>
       `;
 
