@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+      <defs>
+        <linearGradient id="terra-sky" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#1e1814"/>
+          <stop offset="50%" stop-color="#3b2e25"/>
+          <stop offset="80%" stop-color="#664f3d"/>
+          <stop offset="100%" stop-color="#997557"/>
+        </linearGradient>
+        <linearGradient id="terra-light" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#c49b6e"/>
+          <stop offset="100%" stop-color="#805d39"/>
+        </linearGradient>
+      </defs>
+      <rect width="1600" height="1100" fill="url(#terra-sky)"/>
+      <!-- Sweeping sharp ridge lines -->
+      <path d="M 0 720 Q 400 560 850 740 T 1600 620 L 1600 1100 L 0 1100 Z" fill="url(#terra-light)"/>
+      <path d="M 400 560 Q 650 780 850 740 Q 620 920 300 1100 L 0 1100 L 0 720 Z" fill="#140f0c"/>
+      <path d="M 850 740 Q 1200 890 1600 620 L 1600 1100 L 850 1100 Z" fill="#241a13"/>
+    </svg>

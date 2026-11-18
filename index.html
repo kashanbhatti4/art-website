@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Edel Regan — Fine Art Photography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="images/wall.webp" fetchpriority="high">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="opener-active">
+  <!-- The World Container (Fixed Viewport) -->
+  <div id="world" aria-label="Black gallery wall with framed photographs">
+    <div id="gallery-stage">
+      <!-- Pure Black Wall Background -->
+      <div id="wall-bg"></div>
+
+      <!-- Atmospheric Dimming Layer with Soft Cutout Mask -->
+      <div id="ambient-dim" aria-hidden="true"></div>
+
+      <!-- Curatorial Wall Inscription (Entrance Panel Before the Frames) -->
+      <header class="gallery-intro" aria-label="Exhibition Introduction">
+        <p class="intro-eyebrow">WELCOME TO EDEL REGAN ART</p>
+        <h1 class="intro-heading">Capturing the Beauty of <span class="heading-accent">Nature on Canvas</span></h1>
+      </header>
+
+      <!-- Hanging Artworks Container (Nail, Wire, Frame & Shadow) -->
+      <div id="hangers-container" role="region" aria-label="Framed Photographs">
+        <!-- 10 Artworks Rendered dynamically by gallery.js -->
+      </div>
+    </div>
+
+    <!-- Scrim for detail text readability -->
+    <div id="curator-scrim" aria-hidden="true"></div>
+
+    <!-- Minimalist Horizontal Scroll Indicator -->
+    <div class="scroll-track" id="scroll-track" aria-hidden="true">
+      <div class="scroll-bar" id="scroll-bar"></div>
+    </div>
+  </div>
+
+  <!-- Detail Sheet: Visible ONLY when a frame is clicked -->
+  <article class="artwork-sheet" id="artwork-sheet" aria-live="polite" hidden>
+    <div class="sheet-content">
+      <p class="sheet-edition" id="sheet-edition"></p>
+      <h1 class="sheet-title" id="sheet-title"></h1>
+      <p class="sheet-story" id="sheet-story"></p>
+
+      <dl class="sheet-specs" id="sheet-specs"></dl>
+
+      <div class="sheet-purchase">
+        <div class="sheet-price-box">
+          <span class="sheet-price" id="sheet-price"></span>
+        </div>
+      </div>
+
+      <div class="sheet-controls">
+        <button type="button" class="btn-back" id="btn-back" aria-label="Return to gallery overview">
+          Back to the wall
+        </button>
+        <div class="sheet-stepper">
+          <button type="button" class="step-btn" id="btn-prev" aria-label="Previous artwork">‹</button>
+          <span class="step-counter" id="step-counter"></span>
+          <button type="button" class="step-btn" id="btn-next" aria-label="Next artwork">›</button>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Website Opener Transition (5 Vertical Strips Rising from Bottom to Top) -->
+  <div id="site-opener" aria-hidden="true">
+    <div class="opener-strips-wrapper">
+      <div class="opener-strip strip-1" style="background-color: #5C6E6C;"></div>
+      <div class="opener-strip strip-2" style="background-color: #C76615;"></div>
+      <div class="opener-strip strip-3" style="background-color: #02241F;"></div>
+      <div class="opener-strip strip-4" style="background-color: #02211D;"></div>
+      <div class="opener-strip strip-5" style="background-color: #010F0D;"></div>
+    </div>
+  </div>
+
+  <script src="gallery.js" defer></script>
+</body>
+</html>

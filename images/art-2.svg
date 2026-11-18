@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+      <defs>
+        <linearGradient id="wall-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#e2dad0"/>
+          <stop offset="60%" stop-color="#cac0b3"/>
+          <stop offset="100%" stop-color="#a89e90"/>
+        </linearGradient>
+        <linearGradient id="shadow-grad" x1="0%" y1="0%" x2="100%" y2="80%">
+          <stop offset="0%" stop-color="#141215"/>
+          <stop offset="100%" stop-color="#241e24"/>
+        </linearGradient>
+      </defs>
+      <rect width="1600" height="1200" fill="url(#wall-grad)"/>
+      <!-- Brutalist Architectural Diagonal Shadow -->
+      <polygon points="0,0 720,0 1600,850 1600,1200 480,1200 0,600" fill="url(#shadow-grad)"/>
+      <!-- Secondary architectural geometry line -->
+      <line x1="720" y1="0" x2="1600" y2="850" stroke="#f6f0e6" stroke-width="4" opacity="0.7"/>
+      <rect x="880" y="240" width="340" height="420" fill="#d9cfc1" opacity="0.85"/>
+      <polygon points="880,240 1220,240 1220,660" fill="#141215" opacity="0.65"/>
+    </svg>

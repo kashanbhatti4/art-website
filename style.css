@@ -1,0 +1,789 @@
+/* ==========================================================================
+   EDEL REGAN — FINE ART PHOTOGRAPHY
+   Pure Black Wall, 10-Piece Staggered Salon Wall & Horizontal Scroll Engine
+   ========================================================================== */
+
+/* Typography */
+@font-face {
+  font-family: 'Marcellus';
+  src: url('fonts/marcellus.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('fonts/manrope.woff2') format('woff2');
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('fonts/fraunces-italic.woff2') format('woff2');
+  font-weight: 300 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@property --cx {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+
+@property --cy {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+
+@property --rx {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 10%;
+}
+
+@property --ry {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 20%;
+}
+
+:root {
+  --bg-deep: #000000;
+  --bg-wall: #000000;
+  --ink: #f5f0ea;
+  --muted: rgba(245, 240, 234, 0.65);
+  --faint: rgba(245, 240, 234, 0.35);
+  --border-line: rgba(245, 240, 234, 0.12);
+  --accent: #d8b283;
+  --accent-glow: rgba(216, 178, 131, 0.35);
+
+  --font-serif: 'Marcellus', Georgia, serif;
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-italic: 'Fraunces', Georgia, serif;
+  --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-eyebrow: 'Google Sans', 'Google Sans Text', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --ease-lux: cubic-bezier(0.62, 0, 0.22, 1);
+  --ease-smooth: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #000000;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body:not(.in-detail) {
+  cursor: grab;
+}
+
+body.is-dragging {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
+body.is-dragging * {
+  user-select: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   The World Container & Panoramic Horizontal Stage
+   -------------------------------------------------------------------------- */
+#world {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background-color: #000000;
+  background-image: url('images/wall.webp');
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  touch-action: none;
+}
+
+#gallery-stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: var(--stage-width, 260vw);
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+#wall-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -400px;
+  right: -400px;
+  background-image: url('images/wall.webp');
+  background-size: auto 100%;
+  background-repeat: repeat-x;
+  background-position: left center;
+  pointer-events: none;
+}
+
+/* Atmospheric Dimming Overlay (Natural Cutout Mask - Sitting ABOVE all frames) */
+#ambient-dim {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(1, 15, 13, 0.74);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  backdrop-filter: blur(12px) saturate(1.15);
+  transition: opacity 0.8s var(--ease-smooth), --cx 0.65s var(--ease-smooth), --cy 0.65s var(--ease-smooth), --rx 0.65s var(--ease-smooth), --ry 0.65s var(--ease-smooth);
+  mask-image: radial-gradient(var(--rx) var(--ry) at var(--cx) var(--cy), transparent 0%, transparent 18%, rgba(0, 0, 0, 0.08) 35%, rgba(0, 0, 0, 0.35) 55%, rgba(0, 0, 0, 0.75) 78%, #000 100%);
+  -webkit-mask-image: radial-gradient(var(--rx) var(--ry) at var(--cx) var(--cy), transparent 0%, transparent 18%, rgba(0, 0, 0, 0.08) 35%, rgba(0, 0, 0, 0.35) 55%, rgba(0, 0, 0, 0.75) 78%, #000 100%);
+}
+
+body.has-spotlight #ambient-dim {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Curatorial Gallery Wall Inscription (Hero Entrance Before the Frames)
+   -------------------------------------------------------------------------- */
+.gallery-intro {
+  position: absolute;
+  left: clamp(32px, 4.2vw, 75px);
+  top: 40%;
+  transform: translateY(-50%);
+  width: max-content;
+  max-width: min(860px, 84vw);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  z-index: 12;
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease-smooth), transform 0.6s var(--ease-smooth);
+}
+
+body.in-detail .gallery-intro {
+  opacity: 0;
+  transform: translateY(calc(-50% - 20px));
+  pointer-events: none;
+}
+
+.intro-eyebrow {
+  font-family: var(--font-eyebrow);
+  font-size: clamp(0.875rem, 1.2vw, 1.25rem); /* 14px on small screens to 20px on big screens */
+  font-weight: 500; /* Medium */
+  letter-spacing: 0; /* Letter spacing removed */
+  text-transform: uppercase;
+  color: #C76615;
+  margin: 0 0 6px 0; /* Exact 6px space between eyebrow and heading */
+  line-height: 1.1;
+  text-shadow: none;
+}
+
+.intro-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 6.25rem); /* 40px on small screens to 100px on big screens */
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.2;
+  letter-spacing: -0.03em; /* -3% letter spacing */
+  color: #D4E4E2;
+  margin: 0;
+  text-align: left;
+  text-shadow: none;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.heading-accent {
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.03em;
+}
+
+/* --------------------------------------------------------------------------
+   Hanging Artworks (Physical Nail Anchor, Wire, Frame & Shadow)
+   -------------------------------------------------------------------------- */
+#hangers-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+}
+
+.hanger-unit {
+  position: absolute;
+  left: var(--nail-x);
+  top: var(--nail-y);
+  width: var(--frame-w);
+  height: calc(var(--frame-h) + var(--wire-h));
+  transform: translate(-50%, 0);
+  cursor: pointer;
+  z-index: 10;
+  touch-action: manipulation;
+}
+
+/* Realistic Drop Shadow on the black wall */
+.hanger-shadow {
+  position: absolute;
+  top: var(--wire-h);
+  left: 0;
+  width: var(--frame-w);
+  height: var(--frame-h);
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.95);
+  filter: blur(20px);
+  transform-origin: 50% calc(-1 * var(--wire-h) + 12px);
+  transition: transform 0.6s var(--ease-smooth), opacity 0.6s;
+  pointer-events: none;
+  opacity: 0.95;
+}
+
+/* Physical Assembly pivoting strictly from the Nail Anchor */
+.hanger-assembly {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 12px; /* Anchor Point: The Nail Head */
+  will-change: transform;
+  transition: transform 0.8s var(--ease-smooth);
+  pointer-events: none;
+}
+
+/* Idle ambient breathing drift */
+.hanger-unit.ambient .hanger-assembly {
+  animation: naturalDrift 10s ease-in-out infinite alternate;
+}
+
+@keyframes naturalDrift {
+  0% { transform: rotate(-0.35deg); }
+  100% { transform: rotate(0.35deg); }
+}
+
+/* Nail Stud (Brass/Dark Bronze with metallic shine) */
+.nail-stud {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  width: 13px;
+  height: 13px;
+  margin-left: -6.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ebcf9f 0%, #a4824d 55%, #3d2c16 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  z-index: 25;
+}
+
+/* Hanging Wire */
+.hanging-wire {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  width: calc(var(--frame-w) * 0.86);
+  height: calc(var(--wire-h) - 4px);
+  transform: translateX(-50%);
+  overflow: visible;
+  z-index: 15;
+}
+
+.wire-line {
+  stroke: #332f2b;
+  stroke-width: 1.25px;
+  stroke-linecap: round;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+}
+
+/* Physical Frame Body (Dark luxury wood & beveled molding) */
+.frame-body {
+  position: absolute;
+  top: var(--wire-h);
+  left: 0;
+  width: var(--frame-w);
+  height: var(--frame-h);
+  background: #110f13;
+  border-radius: 2px;
+  box-shadow: 
+    0 1px 2px rgba(255, 255, 255, 0.1),
+    0 24px 60px rgba(0, 0, 0, 0.95),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  padding: clamp(10px, 1.6vw, 18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame-molding {
+  position: absolute;
+  inset: 0;
+  border: 12px solid #141217;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.98), 0 0 2px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+/* Museum Passe-partout (Mat Board) */
+.mat-board {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #f6f3ed;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.35);
+  padding: clamp(8px, 1.2vw, 15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Photo Viewport */
+.art-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.art-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Museum Glass Sheen */
+.glass-reflection {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 28%, transparent 55%);
+  pointer-events: none;
+}
+
+/* Floating Artwork Info Badge (Reveals on Hover) */
+.hanger-badge {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 10px); /* Exactly 10px space between the bottom of the frame and the text below */
+  transform: translateX(-50%) translateY(6px);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  text-align: center;
+  z-index: 30;
+  transition: opacity 0.35s var(--ease-smooth), transform 0.35s var(--ease-smooth);
+}
+
+.badge-name {
+  display: block;
+  font-family: var(--font-eyebrow);
+  font-size: 1rem; /* 16px on all screens */
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #D4E4E2;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 1);
+  line-height: 1.25;
+}
+
+.badge-meta {
+  display: block;
+  font-family: var(--font-eyebrow);
+  font-size: 1.125rem; /* 18px */
+  font-weight: 600; /* semibold */
+  letter-spacing: 0;
+  color: #C76615;
+  margin-top: 4px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 1);
+  line-height: 1.25;
+}
+
+.hanger-unit:hover .hanger-badge,
+.hanger-unit.active-hover .hanger-badge {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+body.in-detail .hanger-badge {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  transform: translateX(-50%) translateY(8px) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Minimalist Horizontal Scroll Progress Indicator
+   -------------------------------------------------------------------------- */
+.scroll-track {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(240px, 50vw);
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  z-index: 40;
+  pointer-events: none;
+  transition: opacity 0.6s var(--ease-smooth);
+}
+
+.scroll-bar {
+  height: 100%;
+  width: 15%;
+  background: var(--accent);
+  border-radius: 999px;
+  transform-origin: left;
+  transition: transform 0.1s linear;
+}
+
+body.in-detail .scroll-track {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Curator's Detail Sheet (Visible ONLY when a frame is clicked)
+   -------------------------------------------------------------------------- */
+#curator-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(90deg, rgba(1, 15, 13, 0.98) 0%, rgba(1, 15, 13, 0.92) 32%, rgba(1, 15, 13, 0.70) 50%, transparent 72%);
+  transition: opacity 0.8s var(--ease-smooth);
+  z-index: 5;
+}
+
+body.in-detail #curator-scrim {
+  opacity: 1;
+}
+
+.artwork-sheet {
+  position: fixed;
+  left: clamp(24px, 5vw, 80px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(420px, 86vw);
+  z-index: 30;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-smooth), visibility 0.5s;
+}
+
+.artwork-sheet[hidden] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  display: block; /* Kept block so browser computes layout & CSS transitions interpolate smoothly */
+}
+
+body.in-detail .artwork-sheet {
+  pointer-events: auto;
+}
+
+.artwork-sheet.show {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.sheet-content > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.65s var(--ease-smooth), transform 0.65s var(--ease-smooth);
+}
+
+.artwork-sheet.show .sheet-content > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered entrance */
+.artwork-sheet.show .sheet-edition { transition-delay: 0.06s; }
+.artwork-sheet.show .sheet-title { transition-delay: 0.12s; }
+.artwork-sheet.show .sheet-story { transition-delay: 0.18s; }
+.artwork-sheet.show .sheet-specs { transition-delay: 0.24s; }
+.artwork-sheet.show .sheet-purchase { transition-delay: 0.30s; }
+.artwork-sheet.show .sheet-controls { transition-delay: 0.36s; }
+
+.sheet-edition {
+  font-family: var(--font-eyebrow);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #D4E4E2;
+  font-weight: 500;
+  margin: 0 0 10px 0;
+}
+
+.sheet-title {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #C76615;
+  margin: 0 0 14px 0;
+  font-weight: 400;
+}
+
+.sheet-story {
+  font-family: var(--font-eyebrow);
+  font-size: 16px;
+  line-height: 1.6;
+  color: #5C6E6C;
+  margin: 0 0 20px 0;
+}
+
+.sheet-specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 20px;
+  padding: 16px 0;
+  border-top: 1px solid rgba(92, 110, 108, 0.25);
+  border-bottom: 1px solid rgba(92, 110, 108, 0.25);
+  margin: 0 0 22px 0;
+}
+
+.spec-item dt {
+  font-family: var(--font-eyebrow);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5C6E6C;
+  margin-bottom: 3px;
+  font-weight: 500;
+}
+
+.spec-item dd {
+  margin: 0;
+  font-family: var(--font-eyebrow);
+  font-size: 16px;
+  color: #D4E4E2;
+  font-weight: 500;
+}
+
+.sheet-purchase {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(92, 110, 108, 0.25);
+  margin-bottom: 22px;
+}
+
+.sheet-price {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 28px;
+  color: #C76615;
+  font-weight: 400;
+}
+
+.sheet-tax {
+  display: none;
+}
+
+.sheet-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  font-family: var(--font-eyebrow);
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #D4E4E2;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.3s, opacity 0.3s;
+  padding: 6px 0;
+}
+
+.btn-back:hover {
+  color: #FFFFFF;
+  opacity: 0.9;
+}
+
+.sheet-stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-btn {
+  background: none;
+  border: 1px solid rgba(92, 110, 108, 0.4);
+  color: #D4E4E2;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+  font-family: var(--font-eyebrow);
+}
+
+.step-btn:hover {
+  background: rgba(92, 110, 108, 0.2);
+  border-color: #D4E4E2;
+  color: #FFFFFF;
+}
+
+.step-counter {
+  font-family: var(--font-eyebrow);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: #5C6E6C;
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile Responsive Adjustments
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px), (orientation: portrait) {
+  .intro-eyebrow {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  #curator-scrim {
+    background: linear-gradient(0deg, rgba(1, 15, 13, 0.99) 0%, rgba(1, 15, 13, 0.92) 50%, transparent 80%);
+  }
+
+  .artwork-sheet {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    transform: none;
+    padding: 38px 20px calc(24px + env(safe-area-inset-bottom));
+    background: linear-gradient(0deg, #010F0D 85%, rgba(1, 15, 13, 0.95) 95%, transparent);
+    max-height: 54vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 38px, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 38px, black 100%);
+  }
+
+  .sheet-title {
+    font-size: 36px;
+  }
+
+  .sheet-specs {
+    gap: 8px 14px;
+    padding: 10px 0;
+    margin: 0 0 16px 0;
+  }
+
+  .sheet-purchase {
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+  }
+
+  .gallery-intro {
+    left: clamp(20px, 5vw, 28px);
+    width: min(330px, 80vw);
+    top: 38%;
+    transform: translateY(-50%);
+    padding: 0;
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Website Opener: 5 Vertical Strips Rising from Bottom to Top
+   -------------------------------------------------------------------------- */
+body.opener-active .gallery-intro,
+body.opener-active .hanger-unit {
+  will-change: transform;
+}
+
+#site-opener {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  pointer-events: auto;
+  overflow: hidden;
+  background: transparent;
+}
+
+#site-opener.is-hidden {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+.opener-strips-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.opener-strip {
+  position: absolute;
+  top: 0;
+  width: 20%;
+  will-change: transform;
+}
+
+/* 5 Vertical Strips with Staggered Heights (matching exact high & low formation) */
+.opener-strip.strip-1 {
+  left: 0%;
+  height: 102vh;
+  background-color: #5C6E6C;
+}
+
+.opener-strip.strip-2 {
+  left: 20%;
+  height: 124vh;
+  background-color: #C76615;
+}
+
+.opener-strip.strip-3 {
+  left: 40%;
+  height: 106vh;
+  background-color: #02241F;
+}
+
+.opener-strip.strip-4 {
+  left: 60%;
+  height: 116vh;
+  background-color: #02211D;
+}
+
+.opener-strip.strip-5 {
+  left: 80%;
+  height: 106vh;
+  background-color: #010F0D;
+}
+
