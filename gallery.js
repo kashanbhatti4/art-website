@@ -113,6 +113,9 @@
   const sheet = document.getElementById('artwork-sheet');
   const scrollBar = document.getElementById('scroll-bar');
   const scrollTrack = document.getElementById('scroll-track');
+  const nextSection = document.getElementById('next-section');
+  const nextSectionInner = document.getElementById('next-section-inner');
+  const nextSectionContainer = document.getElementById('next-section-container');
 
   // Sheet fields
   const sheetEdition = document.getElementById('sheet-edition');
@@ -132,13 +135,16 @@
   let currentMode = null;
 
   // ---------------------------------------------------------------------------
-  // 3. High-Precision "Butter-Smooth" Physics Engine
+  // 3. High-Precision "Butter-Smooth" Physics Engine (Horizontal Gallery + Vertical Next Section)
   // ---------------------------------------------------------------------------
-  let currentScrollX = 0;
-  let targetScrollX = 0;
+  let currentScroll = 0;
+  let targetScroll = 0;
   let prevScrollX = 0;
   let scrollVelocity = 0;
-  let maxScroll = 0;
+  let maxScrollX = 0;
+  let maxScrollTotal = 0;
+  let transitionDist = 0;
+  let verticalDist = 0;
   let stagePixelWidth = 0;
   let lastFrameTime = performance.now();
 
@@ -187,7 +193,7 @@
     const rightMargin = mob ? 120 : (isMid ? 180 : 250);
     const lastIdx = layout.length - 1;
     stagePixelWidth = Math.round(centers[lastIdx] + layout[lastIdx].frameW / 2 + rightMargin);
-    maxScroll = Math.max(0, stagePixelWidth - vw);
+    maxScrollX = Math.max(0, stagePixelWidth - vw);
     stage.style.setProperty('--stage-width', `${stagePixelWidth}px`);
 
     // Assign dynamically calculated nailX percentage to every frame in layout
@@ -195,8 +201,17 @@
       layout[i].nailX = parseFloat(((centers[i] / stagePixelWidth) * 100).toFixed(4));
     }
 
-    targetScrollX = Math.max(0, Math.min(targetScrollX, maxScroll));
-    currentScrollX = targetScrollX;
+    // Vertical Transition Distance (scroll distance to wipe the next section into full view)
+    transitionDist = Math.round(window.innerHeight * 0.9);
+
+    // Vertical Content Scroll Distance (distance to traverse content of next section)
+    const container = document.getElementById('next-section-container');
+    const contentH = container ? container.offsetHeight : window.innerHeight;
+    verticalDist = Math.max(Math.round(window.innerHeight * 0.45), contentH - window.innerHeight + 140);
+    maxScrollTotal = maxScrollX + transitionDist + verticalDist;
+
+    targetScroll = Math.max(0, Math.min(targetScroll, maxScrollTotal));
+    currentScroll = targetScroll;
   }
 
   // Continuous 60/120fps Animation Loop with Cinematic Damping & Inertia Glide
@@ -210,36 +225,73 @@
     if (!isZoomed) {
       // 1. Measured, controlled momentum glide (never shoots away endlessly)
       if (Math.abs(scrollVelocity) > 0.05) {
-        targetScrollX += scrollVelocity * dt * 55;
+        targetScroll += scrollVelocity * dt * 55;
         scrollVelocity *= Math.pow(0.86, dt * 60); // dignified, natural deceleration
       } else {
         scrollVelocity = 0;
       }
 
-      // 2. Strict boundaries: Never exceed or expose the edges of the wall
-      targetScrollX = Math.max(0, Math.min(maxScroll, targetScrollX));
+      // 2. Strict boundaries: Never exceed or expose the edges
+      targetScroll = Math.max(0, Math.min(maxScrollTotal, targetScroll));
 
       // 3. Cinematic Exponential Damping (Velvet "slips like butter" curve)
       const lerpSpeed = isDragging ? 18 : 6.8; // crisp while dragging, smooth and responsive when released
       const factor = 1 - Math.exp(-lerpSpeed * dt);
-      currentScrollX += (targetScrollX - currentScrollX) * factor;
-      currentScrollX = Math.max(0, Math.min(maxScroll, currentScrollX));
+      currentScroll += (targetScroll - currentScroll) * factor;
+      currentScroll = Math.max(0, Math.min(maxScrollTotal, currentScroll));
 
-      // 4. Render smooth translation
-      stage.style.transform = `translate3d(${-currentScrollX}px, 0, 0) scale(1)`;
+      // 4. Render horizontal stage translation
+      const horizScroll = Math.min(currentScroll, maxScrollX);
+      stage.style.transform = `translate3d(${-horizScroll}px, 0, 0) scale(1)`;
 
       // 5. Update subtle scroll progress bar
-      if (scrollBar && maxScroll > 0) {
-        const progress = Math.max(0, Math.min(1, currentScrollX / maxScroll));
+      if (scrollBar && maxScrollX > 0) {
+        const progress = Math.max(0, Math.min(1, horizScroll / maxScrollX));
         const trackWidth = scrollTrack.offsetWidth;
         const thumbWidth = scrollBar.offsetWidth;
         const travel = trackWidth - thumbWidth;
         scrollBar.style.transform = `translate3d(${progress * travel}px, 0, 0)`;
+
+        // Smoothly fade out scroll progress indicator when transitioning into the vertical section
+        if (currentScroll > maxScrollX + 15) {
+          scrollTrack.style.opacity = '0';
+          scrollTrack.style.pointerEvents = 'none';
+        } else {
+          scrollTrack.style.opacity = '1';
+        }
       }
 
-      // 6. Natural subtle aerodynamic drift on hanging frames while moving
-      const frameSpeed = currentScrollX - prevScrollX;
-      prevScrollX = currentScrollX;
+      // 6. Next Section: Smooth Gradient Wipe Transition & Normal Vertical Scrolling
+      if (nextSection) {
+        if (currentScroll <= maxScrollX) {
+          nextSection.style.transform = 'translate3d(0, 100%, 0)';
+          nextSection.style.pointerEvents = 'none';
+          if (nextSectionInner) nextSectionInner.style.transform = 'translate3d(0, 0, 0)';
+        } else {
+          const vertOffset = currentScroll - maxScrollX;
+          if (vertOffset <= transitionDist) {
+            // Smooth gradient wipe sliding up from bottom
+            const ratio = vertOffset / transitionDist;
+            const ease = ratio * (2 - ratio); // liquid smooth deceleration
+            const translateY = (1 - ease) * 100;
+            nextSection.style.transform = `translate3d(0, ${translateY.toFixed(3)}%, 0)`;
+            nextSection.style.pointerEvents = ratio > 0.5 ? 'auto' : 'none';
+            if (nextSectionInner) nextSectionInner.style.transform = 'translate3d(0, 0, 0)';
+          } else {
+            // Section is fully in place; scroll vertically like a normal website
+            nextSection.style.transform = 'translate3d(0, 0, 0)';
+            nextSection.style.pointerEvents = 'auto';
+            const contentScrollY = vertOffset - transitionDist;
+            if (nextSectionInner) {
+              nextSectionInner.style.transform = `translate3d(0, ${-contentScrollY.toFixed(2)}px, 0)`;
+            }
+          }
+        }
+      }
+
+      // 7. Natural subtle aerodynamic drift on hanging frames while moving horizontally
+      const frameSpeed = horizScroll - prevScrollX;
+      prevScrollX = horizScroll;
 
       if (Math.abs(frameSpeed) > 0.1) {
         const tilt = Math.max(-1.1, Math.min(1.1, -frameSpeed * 0.038));
@@ -319,7 +371,8 @@
     });
 
     if (!isZoomed) {
-      stage.style.transform = `translate3d(${-currentScrollX}px, 0, 0) scale(1)`;
+      const horizScroll = Math.min(currentScroll, maxScrollX);
+      stage.style.transform = `translate3d(${-horizScroll}px, 0, 0) scale(1)`;
     }
   }
 
@@ -431,7 +484,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 7. Butter-Smooth Scroll & Fling Input Listeners
+  // 7. Butter-Smooth Scroll & Fling Input Listeners (Horizontal Gallery + Vertical Next Section)
   // ---------------------------------------------------------------------------
   // Wheel Input: Smooth, controlled cinematic scroll that never rockets away
   window.addEventListener(
@@ -448,7 +501,7 @@
 
       // Measured impulse so each notch travels a calm, elegant distance (~80-140px)
       const clampedDelta = Math.max(-120, Math.min(120, delta));
-      targetScrollX = Math.max(0, Math.min(maxScroll, targetScrollX + clampedDelta * 0.85));
+      targetScroll = Math.max(0, Math.min(maxScrollTotal, targetScroll + clampedDelta * 0.85));
       scrollVelocity += clampedDelta * 0.15;
       scrollVelocity = Math.max(-45, Math.min(45, scrollVelocity));
     },
@@ -476,21 +529,26 @@
   let hasDraggedSignificantly = false;
   const pointerHistory = [];
 
-  world.addEventListener('pointerdown', (e) => {
+  function onPointerDown(e) {
     if (isZoomed || isBusy) return;
+    if (e.target.closest('button, a, input, select, textarea, .artwork-sheet')) return;
+
     isDragging = true;
     hasDraggedSignificantly = false;
     dragStartX = e.clientX;
     dragStartY = e.clientY;
-    dragStartScroll = currentScrollX;
+    dragStartScroll = currentScroll;
     dragAxis = null;
     scrollVelocity = 0;
     pointerHistory.length = 0;
     pointerHistory.push({ x: e.clientX, y: e.clientY, t: performance.now() });
     document.body.classList.add('is-dragging');
-    // Note: Do not call setPointerCapture on pointerdown! That retargets pointerup & click to world,
-    // which prevents the click event from firing on individual picture frames.
-  });
+  }
+
+  world.addEventListener('pointerdown', onPointerDown);
+  if (nextSection) {
+    nextSection.addEventListener('pointerdown', onPointerDown);
+  }
 
   window.addEventListener('pointermove', (e) => {
     if (!isDragging || isZoomed) return;
@@ -503,10 +561,12 @@
     if (absDx > 6 || absDy > 6) {
       if (!hasDraggedSignificantly) {
         hasDraggedSignificantly = true;
-        // Acquire pointer capture only once actual dragging motion has begun
         if (e && e.pointerId) {
           try {
-            world.setPointerCapture(e.pointerId);
+            const captureTarget = (nextSection && currentScroll > maxScrollX) ? nextSection : world;
+            if (captureTarget && captureTarget.setPointerCapture) {
+              captureTarget.setPointerCapture(e.pointerId);
+            }
           } catch (_) {}
         }
       }
@@ -517,9 +577,9 @@
       dragAxis = absDy > absDx ? 'vertical' : 'horizontal';
     }
 
-    // 1:1 direct finger tracking: the wall stays locked precisely under the thumb
+    // 1:1 direct finger tracking: the wall / next section stays locked precisely under the thumb
     const delta = dragAxis === 'vertical' ? dy : dx;
-    targetScrollX = dragStartScroll - delta;
+    targetScroll = Math.max(0, Math.min(maxScrollTotal, dragStartScroll - delta));
 
     const now = performance.now();
     pointerHistory.push({ x: e.clientX, y: e.clientY, t: now });
@@ -535,6 +595,11 @@
       try {
         if (world.hasPointerCapture && world.hasPointerCapture(e.pointerId)) {
           world.releasePointerCapture(e.pointerId);
+        }
+      } catch (_) {}
+      try {
+        if (nextSection && nextSection.hasPointerCapture && nextSection.hasPointerCapture(e.pointerId)) {
+          nextSection.releasePointerCapture(e.pointerId);
         }
       } catch (_) {}
     }
@@ -569,12 +634,24 @@
   world.addEventListener(
     'touchmove',
     (e) => {
-      if (!isZoomed) {
+      if (!isZoomed && !e.target.closest('.sheet-content')) {
         e.preventDefault();
       }
     },
     { passive: false }
   );
+
+  if (nextSection) {
+    nextSection.addEventListener(
+      'touchmove',
+      (e) => {
+        if (!isZoomed) {
+          e.preventDefault();
+        }
+      },
+      { passive: false }
+    );
+  }
 
   // ---------------------------------------------------------------------------
   // 8. Cinematic Camera Zoom (Smooth Travel into Any of the 10 Frames)
@@ -626,7 +703,8 @@
     document.body.classList.add('in-detail');
     clearSpotlight();
 
-    const currentTransform = stage.style.transform || `translate3d(${-currentScrollX}px, 0, 0) scale(1)`;
+    const horizScroll = Math.min(currentScroll, maxScrollX);
+    const currentTransform = stage.style.transform || `translate3d(${-horizScroll}px, 0, 0) scale(1)`;
     const nextTransform = `translate3d(${targetStageX}px, ${targetStageY}px, 0) scale(${targetZoom})`;
 
     stage.getAnimations().forEach((a) => a.cancel());
@@ -676,15 +754,15 @@
     const vw = window.innerWidth;
     const framePixelX = (geo.nailX / 100) * stagePixelWidth;
 
-    targetScrollX = Math.max(0, Math.min(maxScroll, framePixelX - vw / 2));
-    currentScrollX = targetScrollX;
-    prevScrollX = targetScrollX;
+    targetScroll = Math.max(0, Math.min(maxScrollX, framePixelX - vw / 2));
+    currentScroll = targetScroll;
+    prevScrollX = targetScroll;
     scrollVelocity = 0;
     isDragging = false;
     document.body.classList.remove('is-dragging');
 
     const currentTransform = stage.style.transform;
-    const defaultTransform = `translate3d(${-targetScrollX}px, 0, 0) scale(1)`;
+    const defaultTransform = `translate3d(${-targetScroll}px, 0, 0) scale(1)`;
 
     stage.getAnimations().forEach((a) => a.cancel());
 

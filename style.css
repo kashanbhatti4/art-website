@@ -751,6 +751,106 @@ body.in-detail .artwork-sheet {
 }
 
 /* --------------------------------------------------------------------------
+   Next Section: Solid #02211D with Smooth Gradient Wipe Transition
+   -------------------------------------------------------------------------- */
+.next-section {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #02211D;
+  z-index: 45;
+  transform: translate3d(0, 100%, 0);
+  will-change: transform;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.gradient-wipe-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: clamp(100px, 16vh, 220px);
+  background: linear-gradient(
+    to top,
+    #02211D 0%,
+    rgba(2, 33, 29, 0.94) 28%,
+    rgba(2, 33, 29, 0.62) 55%,
+    rgba(2, 33, 29, 0.22) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.next-section-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%;
+  will-change: transform;
+}
+
+.next-section-container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: clamp(80px, 14vh, 160px) clamp(24px, 6vw, 80px) clamp(100px, 16vh, 180px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section-eyebrow {
+  font-family: var(--font-eyebrow);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #5C6E6C;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+}
+
+.section-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(34px, 4.8vw, 64px);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: #D4E4E2;
+  margin: 0 0 28px 0;
+  font-weight: 400;
+  max-width: 860px;
+}
+
+.section-divider {
+  width: 56px;
+  height: 2px;
+  background: #C76615;
+  margin: 0 0 32px 0;
+}
+
+.section-text-block {
+  max-width: 720px;
+}
+
+.section-lead {
+  font-family: var(--font-eyebrow);
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.65;
+  color: #D4E4E2;
+  margin: 0 0 24px 0;
+  font-weight: 400;
+}
+
+.section-body {
+  font-family: var(--font-eyebrow);
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.75;
+  color: #8A9E9C;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
    Mobile Responsive Adjustments
    -------------------------------------------------------------------------- */
 @media (max-width: 768px),
@@ -854,6 +954,31 @@ body.in-detail .artwork-sheet {
     padding: 0;
     align-items: flex-start;
     text-align: left;
+  }
+
+  .next-section-container {
+    padding: clamp(60px, 12vh, 90px) 24px clamp(80px, 14vh, 120px);
+  }
+
+  .section-heading {
+    font-size: clamp(28px, 7.5vw, 38px);
+    line-height: 1.22;
+    margin-bottom: 22px;
+  }
+
+  .section-divider {
+    margin-bottom: 24px;
+  }
+
+  .section-lead {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .section-body {
+    font-size: 14.5px;
+    line-height: 1.65;
   }
 }
 
