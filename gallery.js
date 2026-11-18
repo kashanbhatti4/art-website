@@ -732,22 +732,23 @@
   // ---------------------------------------------------------------------------
   function fillCuratorSheet(idx) {
     const art = ARTWORKS[idx];
-    sheetEdition.textContent = art.edition;
-    sheetTitle.textContent = art.title;
-    sheetStory.textContent = art.story;
-    sheetPrice.textContent = `€${art.price.toLocaleString('en-US')}`;
-    stepCounter.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(ARTWORKS.length).padStart(2, '0')}`;
+    if (sheetEdition) sheetEdition.textContent = art.edition;
+    if (sheetTitle) sheetTitle.textContent = art.title;
+    if (sheetStory) sheetStory.textContent = art.story;
+    if (sheetPrice) sheetPrice.textContent = `€${art.price.toLocaleString('en-US')}`;
+    if (stepCounter) stepCounter.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(ARTWORKS.length).padStart(2, '0')}`;
 
-    // Authentic CSV specs (Medium & Framing)
-    sheetSpecs.innerHTML = art.specs
-      .map(
-        (s) => `
-        <div class="spec-item">
-          <dt>${s.label}</dt>
-          <dd>${s.value}</dd>
-        </div>`
-      )
-      .join('');
+    if (sheetSpecs && art.specs) {
+      sheetSpecs.innerHTML = art.specs
+        .map(
+          (s) => `
+          <div class="spec-item">
+            <dt>${s.label}</dt>
+            <dd>${s.value}</dd>
+          </div>`
+        )
+        .join('');
+    }
   }
 
   // ---------------------------------------------------------------------------

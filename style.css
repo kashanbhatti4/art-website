@@ -550,16 +550,12 @@ body.in-detail .artwork-sheet {
   transition-delay: 0.18s;
 }
 
-.artwork-sheet.show .sheet-specs {
+.artwork-sheet.show .sheet-action {
   transition-delay: 0.24s;
 }
 
-.artwork-sheet.show .sheet-purchase {
-  transition-delay: 0.30s;
-}
-
 .artwork-sheet.show .sheet-controls {
-  transition-delay: 0.36s;
+  transition-delay: 0.30s;
 }
 
 .sheet-edition {
@@ -587,92 +583,47 @@ body.in-detail .artwork-sheet {
   font-size: 16px;
   line-height: 1.6;
   color: #5C6E6C;
-  margin: 0 0 20px 0;
+  margin: 0 0 24px 0;
 }
 
-.sheet-specs {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px 20px;
-  padding: 16px 0;
-  border-top: 1px solid rgba(92, 110, 108, 0.25);
-  border-bottom: 1px solid rgba(92, 110, 108, 0.25);
-  margin: 0 0 22px 0;
-}
-
-.spec-item dt {
-  font-family: var(--font-eyebrow);
-  font-size: 14px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #5C6E6C;
-  margin-bottom: 3px;
-  font-weight: 500;
-}
-
-.spec-item dd {
-  margin: 0;
-  font-family: var(--font-eyebrow);
-  font-size: 16px;
-  color: #D4E4E2;
-  font-weight: 500;
-}
-
-.sheet-purchase {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(92, 110, 108, 0.25);
-  margin-bottom: 22px;
-}
-
-.sheet-price {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 28px;
-  color: #C76615;
-  font-weight: 400;
+.sheet-action {
+  margin-bottom: 20px;
 }
 
 .btn-collection {
-  background: transparent;
-  border: 1px solid rgba(199, 102, 21, 0.5);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: min(340px, 100%);
+  background: rgba(1, 15, 13, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 9999px;
-  padding: 8px 18px;
+  padding: 12px 24px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.08);
   font-family: var(--font-eyebrow);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #D4E4E2;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
   transition: all 0.3s var(--ease-smooth);
+  user-select: none;
   white-space: nowrap;
 }
 
 .btn-collection:hover {
-  background: rgba(199, 102, 21, 0.15);
-  border-color: #C76615;
+  background: rgba(2, 33, 29, 0.95);
+  border-color: rgba(255, 255, 255, 0.35);
   color: #FFFFFF;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75), 0 0 14px rgba(212, 228, 226, 0.12);
+  transform: translateY(-1px);
 }
 
-.btn-collection .btn-arrow {
-  color: #C76615;
-  font-size: 14px;
-  transition: transform 0.3s var(--ease-smooth);
-}
-
-.btn-collection:hover .btn-arrow {
-  transform: translateX(3px);
-}
-
-.sheet-tax {
-  display: none;
+.btn-collection:active {
+  transform: translateY(0);
 }
 
 /* Glass Button Strip: Floating Rounded Pill Bar */
@@ -680,6 +631,7 @@ body.in-detail .artwork-sheet {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
+  width: min(340px, 100%);
   background: rgba(1, 15, 13, 0.82);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -692,7 +644,7 @@ body.in-detail .artwork-sheet {
   opacity: 0;
   transform: translateY(18px);
   transition: opacity 0.65s var(--ease-smooth), transform 0.65s var(--ease-smooth);
-  transition-delay: 0.36s;
+  transition-delay: 0.30s;
 }
 
 .artwork-sheet.show .sheet-controls {
@@ -711,24 +663,13 @@ body.in-detail .artwork-sheet {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 0;
+  padding: 6px 4px;
   transition: color 0.25s, opacity 0.25s;
   white-space: nowrap;
 }
 
 .btn-back:hover {
   color: #FFFFFF;
-}
-
-.btn-back-arrow {
-  font-size: 14px;
-  line-height: 1;
-  transition: transform 0.25s var(--ease-smooth);
-}
-
-.btn-back:hover .btn-back-arrow {
-  transform: translateX(-3px);
 }
 
 .pill-divider {
@@ -825,17 +766,16 @@ body.in-detail .artwork-sheet {
     font-size: 32px;
   }
 
-  .sheet-specs {
-    gap: 8px 14px;
-    padding: 10px 0;
-    margin: 0 0 16px 0;
+  .sheet-action {
+    margin-top: 22px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
   }
 
-  .sheet-purchase {
-    flex-wrap: wrap;
-    gap: 12px;
-    padding-bottom: 14px;
-    margin-bottom: 16px;
+  .btn-collection {
+    width: min(340px, 100%);
+    padding: 12px 20px;
   }
 
   /* Sticky Floating Glass Button Strip on Mobile (Always Visible in Detail Mode) */
@@ -847,7 +787,7 @@ body.in-detail .artwork-sheet {
     z-index: 50;
     width: auto;
     max-width: calc(100vw - 28px);
-    padding: 7px 12px 7px 16px;
+    padding: 7px 12px 7px 18px;
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
     opacity: 0;
     pointer-events: none;
