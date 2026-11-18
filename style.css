@@ -752,37 +752,48 @@ body.in-detail .artwork-sheet {
 }
 
 /* --------------------------------------------------------------------------
-   Next Section: Solid #02211D with Smooth Gradient Wipe Transition
+   Next Section: Smooth Linear Gradient Lead into Solid #02211D
    -------------------------------------------------------------------------- */
 .next-section {
   position: fixed;
-  inset: 0;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #02211D;
   z-index: 45;
   transform: translate3d(0, 100%, 0);
   will-change: transform;
   pointer-events: none;
-  overflow: hidden;
+  overflow: visible;
 }
 
-.gradient-wipe-edge {
+/* Tall linear gradient transition lead that enters first */
+.next-section-gradient-lead {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 100%;
-  height: clamp(160px, 35vh, 400px);
+  height: clamp(260px, 65vh, 680px);
   background: linear-gradient(
-    to top,
-    #02211D 0%,
-    rgba(2, 33, 29, 0.98) 20%,
-    rgba(2, 33, 29, 0.85) 42%,
-    rgba(2, 33, 29, 0.55) 65%,
-    rgba(2, 33, 29, 0.20) 84%,
-    transparent 100%
+    180deg,
+    transparent 0%,
+    rgba(2, 33, 29, 0.12) 16%,
+    rgba(2, 33, 29, 0.38) 36%,
+    rgba(2, 33, 29, 0.70) 58%,
+    rgba(2, 33, 29, 0.94) 82%,
+    #02211D 100%
   );
   pointer-events: none;
+}
+
+/* Solid #02211D background body */
+.next-section-body {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #02211D;
+  overflow: hidden;
 }
 
 .next-section-inner {
