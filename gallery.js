@@ -201,13 +201,15 @@
       layout[i].nailX = parseFloat(((centers[i] / stagePixelWidth) * 100).toFixed(4));
     }
 
-    // Vertical Transition Distance (generous distance to unveil gradient lead and slide up gallery)
-    transitionDist = Math.round(window.innerHeight * 1.25);
+    // Vertical Transition Distance (smooth transition to unveil 100vh solid section)
+    transitionDist = Math.round(window.innerHeight * 1.0);
 
-    // Vertical Content Scroll Distance (distance to traverse content of next section)
+    // Vertical Content Scroll Distance: solid area is 100vh on every screen.
+    // Only scroll further if the text content genuinely overflows the 100vh viewport on small screens.
+    const inner = document.getElementById('next-section-inner');
     const container = document.getElementById('next-section-container');
-    const contentH = container ? container.offsetHeight : window.innerHeight;
-    verticalDist = Math.max(Math.round(window.innerHeight * 0.45), contentH - window.innerHeight + 140);
+    const contentH = inner ? inner.scrollHeight : (container ? container.offsetHeight : window.innerHeight);
+    verticalDist = Math.max(0, contentH - window.innerHeight);
     maxScrollTotal = maxScrollX + transitionDist + verticalDist;
 
     targetScroll = Math.max(0, Math.min(targetScroll, maxScrollTotal));
