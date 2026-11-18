@@ -261,24 +261,29 @@
         }
       }
 
-      // 6. Next Section: Smooth Gradient Wipe Transition & Normal Vertical Scrolling
+      // 6. Next Section: Unified Slide-Up with Linear Gradient and Solid #02211D
       if (nextSection) {
         if (currentScroll <= maxScrollX) {
+          world.style.transform = 'translate3d(0, 0, 0)';
           nextSection.style.transform = 'translate3d(0, 100%, 0)';
           nextSection.style.pointerEvents = 'none';
           if (nextSectionInner) nextSectionInner.style.transform = 'translate3d(0, 0, 0)';
         } else {
           const vertOffset = currentScroll - maxScrollX;
           if (vertOffset <= transitionDist) {
-            // Smooth gradient wipe sliding up from bottom
+            // Unified slide-up: Gallery wall & frames slide up as the linear gradient and solid section slide in
             const ratio = vertOffset / transitionDist;
             const ease = ratio * (2 - ratio); // liquid smooth deceleration
             const translateY = (1 - ease) * 100;
+            const worldTranslateY = ease * window.innerHeight;
+
+            world.style.transform = `translate3d(0, ${-worldTranslateY.toFixed(2)}px, 0)`;
             nextSection.style.transform = `translate3d(0, ${translateY.toFixed(3)}%, 0)`;
             nextSection.style.pointerEvents = ratio > 0.5 ? 'auto' : 'none';
             if (nextSectionInner) nextSectionInner.style.transform = 'translate3d(0, 0, 0)';
           } else {
-            // Section is fully in place; scroll vertically like a normal website
+            // Transition complete: Gallery is offscreen, next section is locked in place with normal vertical scrolling
+            world.style.transform = 'translate3d(0, -100vh, 0)';
             nextSection.style.transform = 'translate3d(0, 0, 0)';
             nextSection.style.pointerEvents = 'auto';
             const contentScrollY = vertOffset - transitionDist;
@@ -760,6 +765,7 @@
     scrollVelocity = 0;
     isDragging = false;
     document.body.classList.remove('is-dragging');
+    world.style.transform = 'translate3d(0, 0, 0)';
 
     const currentTransform = stage.style.transform;
     const defaultTransform = `translate3d(${-targetScroll}px, 0, 0) scale(1)`;
