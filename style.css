@@ -70,11 +70,14 @@
   --ease-smooth: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -187,23 +190,29 @@ body.in-detail .gallery-intro {
 
 .intro-eyebrow {
   font-family: var(--font-eyebrow);
-  font-size: clamp(0.875rem, 1.2vw, 1.25rem); /* 14px on small screens to 20px on big screens */
-  font-weight: 500; /* Medium */
-  letter-spacing: 0; /* Letter spacing removed */
+  font-size: clamp(0.875rem, 1.2vw, 1.25rem);
+  /* 14px on small screens to 20px on big screens */
+  font-weight: 500;
+  /* Medium */
+  letter-spacing: 0;
+  /* Letter spacing removed */
   text-transform: uppercase;
   color: #C76615;
-  margin: 0 0 6px 0; /* Exact 6px space between eyebrow and heading */
+  margin: 0 0 6px 0;
+  /* Exact 6px space between eyebrow and heading */
   line-height: 1.1;
   text-shadow: none;
 }
 
 .intro-heading {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 5vw, 6.25rem); /* 40px on small screens to 100px on big screens */
+  font-size: clamp(2.5rem, 5vw, 6.25rem);
+  /* 40px on small screens to 100px on big screens */
   font-weight: 400;
   font-style: normal;
   line-height: 1.2;
-  letter-spacing: -0.03em; /* -3% letter spacing */
+  letter-spacing: -0.03em;
+  /* -3% letter spacing */
   color: #D4E4E2;
   margin: 0;
   text-align: left;
@@ -261,7 +270,8 @@ body.in-detail .gallery-intro {
   position: relative;
   width: 100%;
   height: 100%;
-  transform-origin: 50% 12px; /* Anchor Point: The Nail Head */
+  transform-origin: 50% 12px;
+  /* Anchor Point: The Nail Head */
   will-change: transform;
   transition: transform 0.8s var(--ease-smooth);
   pointer-events: none;
@@ -273,8 +283,13 @@ body.in-detail .gallery-intro {
 }
 
 @keyframes naturalDrift {
-  0% { transform: rotate(-0.35deg); }
-  100% { transform: rotate(0.35deg); }
+  0% {
+    transform: rotate(-0.35deg);
+  }
+
+  100% {
+    transform: rotate(0.35deg);
+  }
 }
 
 /* Nail Stud (Brass/Dark Bronze with metallic shine) */
@@ -307,7 +322,7 @@ body.in-detail .gallery-intro {
   stroke: #332f2b;
   stroke-width: 1.25px;
   stroke-linecap: round;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
 }
 
 /* Physical Frame Body (Dark luxury wood & beveled molding) */
@@ -319,7 +334,7 @@ body.in-detail .gallery-intro {
   height: var(--frame-h);
   background: #110f13;
   border-radius: 2px;
-  box-shadow: 
+  box-shadow:
     0 1px 2px rgba(255, 255, 255, 0.1),
     0 24px 60px rgba(0, 0, 0, 0.95),
     inset 0 0 0 1px rgba(255, 255, 255, 0.05);
@@ -380,7 +395,8 @@ body.in-detail .gallery-intro {
 .hanger-badge {
   position: absolute;
   left: 50%;
-  top: calc(100% + 10px); /* Exactly 10px space between the bottom of the frame and the text below */
+  top: calc(100% + 10px);
+  /* Exactly 10px space between the bottom of the frame and the text below */
   transform: translateX(-50%) translateY(6px);
   opacity: 0;
   pointer-events: none;
@@ -393,7 +409,8 @@ body.in-detail .gallery-intro {
 .badge-name {
   display: block;
   font-family: var(--font-eyebrow);
-  font-size: 1rem; /* 16px on all screens */
+  font-size: 1rem;
+  /* 16px on all screens */
   font-weight: 400;
   letter-spacing: 0;
   color: #D4E4E2;
@@ -404,8 +421,10 @@ body.in-detail .gallery-intro {
 .badge-meta {
   display: block;
   font-family: var(--font-eyebrow);
-  font-size: 1.125rem; /* 18px */
-  font-weight: 600; /* semibold */
+  font-size: 1.125rem;
+  /* 18px */
+  font-weight: 600;
+  /* semibold */
   letter-spacing: 0;
   color: #C76615;
   margin-top: 4px;
@@ -491,7 +510,8 @@ body.in-detail #curator-scrim {
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
-  display: block; /* Kept block so browser computes layout & CSS transitions interpolate smoothly */
+  display: block;
+  /* Kept block so browser computes layout & CSS transitions interpolate smoothly */
 }
 
 body.in-detail .artwork-sheet {
@@ -503,24 +523,41 @@ body.in-detail .artwork-sheet {
   opacity: 1 !important;
 }
 
-.sheet-content > * {
+.sheet-content>* {
   opacity: 0;
   transform: translateY(18px);
   transition: opacity 0.65s var(--ease-smooth), transform 0.65s var(--ease-smooth);
 }
 
-.artwork-sheet.show .sheet-content > * {
+.artwork-sheet.show .sheet-content>* {
   opacity: 1;
   transform: translateY(0);
 }
 
 /* Staggered entrance */
-.artwork-sheet.show .sheet-edition { transition-delay: 0.06s; }
-.artwork-sheet.show .sheet-title { transition-delay: 0.12s; }
-.artwork-sheet.show .sheet-story { transition-delay: 0.18s; }
-.artwork-sheet.show .sheet-specs { transition-delay: 0.24s; }
-.artwork-sheet.show .sheet-purchase { transition-delay: 0.30s; }
-.artwork-sheet.show .sheet-controls { transition-delay: 0.36s; }
+.artwork-sheet.show .sheet-edition {
+  transition-delay: 0.06s;
+}
+
+.artwork-sheet.show .sheet-title {
+  transition-delay: 0.12s;
+}
+
+.artwork-sheet.show .sheet-story {
+  transition-delay: 0.18s;
+}
+
+.artwork-sheet.show .sheet-specs {
+  transition-delay: 0.24s;
+}
+
+.artwork-sheet.show .sheet-purchase {
+  transition-delay: 0.30s;
+}
+
+.artwork-sheet.show .sheet-controls {
+  transition-delay: 0.36s;
+}
 
 .sheet-edition {
   font-family: var(--font-eyebrow);
@@ -665,7 +702,8 @@ body.in-detail .artwork-sheet {
 /* --------------------------------------------------------------------------
    Mobile Responsive Adjustments
    -------------------------------------------------------------------------- */
-@media (max-width: 768px), (orientation: portrait) {
+@media (max-width: 768px),
+(orientation: portrait) {
   .intro-eyebrow {
     font-size: 14px;
     margin-bottom: 6px;
@@ -787,4 +825,3 @@ body.opener-active .hanger-unit {
   height: 106vh;
   background-color: #010F0D;
 }
-

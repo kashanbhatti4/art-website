@@ -300,10 +300,10 @@
     lastFrameTime = timestamp;
 
     if (!isZoomed) {
-      // 1. Long, silky momentum glide
-      if (Math.abs(scrollVelocity) > 0.02) {
+      // 1. Measured, controlled momentum glide (never shoots away endlessly)
+      if (Math.abs(scrollVelocity) > 0.05) {
         targetScrollX += scrollVelocity * dt * 55;
-        scrollVelocity *= Math.pow(0.932, dt * 60); // gentle, low friction coasting
+        scrollVelocity *= Math.pow(0.86, dt * 60); // dignified, natural deceleration
       } else {
         scrollVelocity = 0;
       }
@@ -312,7 +312,7 @@
       targetScrollX = Math.max(0, Math.min(maxScroll, targetScrollX));
 
       // 3. Cinematic Exponential Damping (Velvet "slips like butter" curve)
-      const lerpSpeed = isDragging ? 14 : 4.2; // responsive while dragging, luxurious glide when released
+      const lerpSpeed = isDragging ? 18 : 6.8; // crisp while dragging, smooth and responsive when released
       const factor = 1 - Math.exp(-lerpSpeed * dt);
       currentScrollX += (targetScrollX - currentScrollX) * factor;
       currentScrollX = Math.max(0, Math.min(maxScroll, currentScrollX));
@@ -524,7 +524,7 @@
   // ---------------------------------------------------------------------------
   // 7. Butter-Smooth Scroll & Fling Input Listeners
   // ---------------------------------------------------------------------------
-  // Wheel Input: High-precision cinematic impulse accumulator with zero native stutter
+  // Wheel Input: Smooth, controlled cinematic scroll that never rockets away
   window.addEventListener(
     'wheel',
     (e) => {
@@ -534,15 +534,14 @@
       let delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
 
       // Handle lines vs pixels mode on Firefox & Windows configurations
-      if (e.deltaMode === 1) delta *= 36;
-      else if (e.deltaMode === 2) delta *= window.innerWidth;
+      if (e.deltaMode === 1) delta *= 24;
+      else if (e.deltaMode === 2) delta *= window.innerWidth * 0.18;
 
-      // Generous distance per flick with soft, butter-smooth acceleration
-      const impulse = delta * 1.35;
-      scrollVelocity += impulse * 0.42;
-      scrollVelocity = Math.max(-280, Math.min(280, scrollVelocity));
-
-      targetScrollX = Math.max(0, Math.min(maxScroll, targetScrollX + impulse * 0.58));
+      // Measured impulse so each notch travels a calm, elegant distance (~80-140px)
+      const clampedDelta = Math.max(-120, Math.min(120, delta));
+      targetScrollX = Math.max(0, Math.min(maxScroll, targetScrollX + clampedDelta * 0.85));
+      scrollVelocity += clampedDelta * 0.15;
+      scrollVelocity = Math.max(-45, Math.min(45, scrollVelocity));
     },
     { passive: false }
   );
@@ -591,18 +590,8 @@
       dragAxis = absDy > absDx ? 'vertical' : 'horizontal';
     }
 
-    let delta = 0;
-    if (dragAxis === 'vertical') {
-      // Natural vertical mobile scroll:
-      // Swiping UP (dy < 0) advances the gallery forward (+X)
-      // Swiping DOWN (dy > 0) scrolls the gallery backward (-X)
-      // 1.25x multiplier gives an effortless, responsive thumb glide
-      delta = dy * 1.25;
-    } else {
-      // Horizontal slider swipe
-      delta = dx;
-    }
-
+    // 1:1 direct finger tracking: the wall stays locked precisely under the thumb
+    const delta = dragAxis === 'vertical' ? dy : dx;
     targetScrollX = dragStartScroll - delta;
 
     const now = performance.now();
@@ -621,7 +610,7 @@
       } catch (_) {}
     }
 
-    // Calculate release velocity for natural cinematic fling
+    // Calculate release velocity for natural, restrained cinematic fling
     if (pointerHistory.length >= 2) {
       const first = pointerHistory[0];
       const last = pointerHistory[pointerHistory.length - 1];
@@ -630,12 +619,10 @@
         let v = 0;
         if (dragAxis === 'vertical') {
           v = (last.y - first.y) / dt;
-          scrollVelocity = -v * 460;
         } else {
           v = (last.x - first.x) / dt;
-          scrollVelocity = -v * 440;
         }
-        scrollVelocity = Math.max(-320, Math.min(320, scrollVelocity));
+        scrollVelocity = Math.max(-55, Math.min(55, -v * 65));
       }
     }
     dragAxis = null;
