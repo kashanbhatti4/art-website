@@ -547,10 +547,12 @@
     { passive: false }
   );
 
-  // Pointer Dragging with High-Mass Cinematic Fling Physics
+  // Pointer Dragging with High-Mass Cinematic Fling Physics (Supports both Natural Vertical Scroll & Horizontal Slider on Mobile)
   let isDragging = false;
   let dragStartX = 0;
+  let dragStartY = 0;
   let dragStartScroll = 0;
+  let dragAxis = null;
   let hasDraggedSignificantly = false;
   const pointerHistory = [];
 
@@ -559,48 +561,99 @@
     isDragging = true;
     hasDraggedSignificantly = false;
     dragStartX = e.clientX;
+    dragStartY = e.clientY;
     dragStartScroll = currentScrollX;
+    dragAxis = null;
     scrollVelocity = 0;
     pointerHistory.length = 0;
-    pointerHistory.push({ x: e.clientX, t: performance.now() });
+    pointerHistory.push({ x: e.clientX, y: e.clientY, t: performance.now() });
     document.body.classList.add('is-dragging');
+
+    try {
+      world.setPointerCapture(e.pointerId);
+    } catch (_) {}
   });
 
   window.addEventListener('pointermove', (e) => {
     if (!isDragging || isZoomed) return;
-    const dx = e.clientX - dragStartX;
 
-    if (Math.abs(dx) > 6) {
+    const dx = e.clientX - dragStartX;
+    const dy = e.clientY - dragStartY;
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+
+    if (absDx > 6 || absDy > 6) {
       hasDraggedSignificantly = true;
     }
 
-    targetScrollX = dragStartScroll - dx;
+    // Determine gesture axis once movement threshold is reached (supports natural vertical mobile scroll as well as horizontal slider)
+    if (!dragAxis && (absDx > 6 || absDy > 6)) {
+      dragAxis = absDy > absDx ? 'vertical' : 'horizontal';
+    }
+
+    let delta = 0;
+    if (dragAxis === 'vertical') {
+      // Natural vertical mobile scroll:
+      // Swiping UP (dy < 0) advances the gallery forward (+X)
+      // Swiping DOWN (dy > 0) scrolls the gallery backward (-X)
+      // 1.25x multiplier gives an effortless, responsive thumb glide
+      delta = dy * 1.25;
+    } else {
+      // Horizontal slider swipe
+      delta = dx;
+    }
+
+    targetScrollX = dragStartScroll - delta;
 
     const now = performance.now();
-    pointerHistory.push({ x: e.clientX, t: now });
-    if (pointerHistory.length > 5) pointerHistory.shift();
+    pointerHistory.push({ x: e.clientX, y: e.clientY, t: now });
+    if (pointerHistory.length > 6) pointerHistory.shift();
   });
 
-  function endDrag() {
+  function endDrag(e) {
     if (!isDragging) return;
     isDragging = false;
     document.body.classList.remove('is-dragging');
+
+    if (e && e.pointerId) {
+      try {
+        world.releasePointerCapture(e.pointerId);
+      } catch (_) {}
+    }
 
     // Calculate release velocity for natural cinematic fling
     if (pointerHistory.length >= 2) {
       const first = pointerHistory[0];
       const last = pointerHistory[pointerHistory.length - 1];
       const dt = last.t - first.t;
-      if (dt > 10 && dt < 220) {
-        const vx = (last.x - first.x) / dt;
-        scrollVelocity = -vx * 420;
+      if (dt > 10 && dt < 250) {
+        let v = 0;
+        if (dragAxis === 'vertical') {
+          v = (last.y - first.y) / dt;
+          scrollVelocity = -v * 460;
+        } else {
+          v = (last.x - first.x) / dt;
+          scrollVelocity = -v * 440;
+        }
         scrollVelocity = Math.max(-320, Math.min(320, scrollVelocity));
       }
     }
+    dragAxis = null;
   }
 
   window.addEventListener('pointerup', endDrag);
   window.addEventListener('pointercancel', endDrag);
+
+  // Prevent rubber-banding on iOS Safari when interacting with the panoramic gallery
+  world.addEventListener(
+    'touchmove',
+    (e) => {
+      if (!isZoomed) {
+        e.preventDefault();
+      }
+    },
+    { passive: false }
+  );
 
   // ---------------------------------------------------------------------------
   // 8. Cinematic Camera Zoom (Smooth Travel into Any of the 10 Frames)

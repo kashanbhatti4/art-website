@@ -89,6 +89,7 @@ html, body {
 
 body:not(.in-detail) {
   cursor: grab;
+  touch-action: none;
 }
 
 body.is-dragging {
@@ -236,7 +237,7 @@ body.in-detail .gallery-intro {
   transform: translate(-50%, 0);
   cursor: pointer;
   z-index: 10;
-  touch-action: manipulation;
+  touch-action: none;
 }
 
 /* Realistic Drop Shadow on the black wall */
