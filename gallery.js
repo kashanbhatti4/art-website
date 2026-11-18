@@ -7,196 +7,112 @@
   'use strict';
 
   // ---------------------------------------------------------------------------
-  // 1. 10 Curated Artworks
+  // 1. 6 Curated Original Artworks by Edel Regan
   // ---------------------------------------------------------------------------
   const ARTWORKS = [
     {
       id: 0,
-      title: 'Solitude at Dún Chaoin',
-      edition: 'N° 01 · Limited Edition of 15',
-      price: 480,
-      story: 'Captured at dusk along the Blasket Sound in County Kerry. The Atlantic swell breaks against ancient sea cliffs in a silent dialogue of cold basalt, sea spray, and rising evening mist.',
+      title: 'Hawthorn Lane, Summer Light',
+      edition: 'N° 01 · One-of-a-kind Original',
+      price: 895,
+      story: 'A sunlit country lane runs past hawthorn in bloom and a field gate, with purple-blue mountains under a wide summer sky.',
       specs: [
-        { label: 'Medium', value: 'Archival Pigment Print' },
-        { label: 'Paper', value: 'Hahnemühle Photo Rag 308gsm' },
-        { label: 'Framing', value: 'Bespoke Solid Black Oak' },
-        { label: 'Dimensions', value: '24 × 36 in (60 × 90 cm)' },
-        { label: 'Location', value: 'Dingle Peninsula, Ireland' },
-        { label: 'Certificate', value: 'Signed, Numbered & Embossed' }
+        { label: 'Medium', value: 'Oil / acrylic on canvas' },
+        { label: 'Base', value: 'Stretched Linen Canvas' },
+        { label: 'Framing', value: 'Framed (natural oak)' },
+        { label: 'Dimensions', value: '24 × 32 in (61 × 81 cm)' }
       ],
-      image: 'images/art-1.svg'
+      image: 'images/hawthorn-lane-summer-light.jpg'
     },
     {
       id: 1,
-      title: 'Linear Shadow No. 7',
-      edition: 'N° 02 · Limited Edition of 10',
-      price: 520,
-      story: 'A brutalist architectural study exploring pure geometry. High noon cast shadows cut across raw poured limestone, stripping the built environment down to stark tonal contrast and light.',
+      title: 'Through the Pines',
+      edition: 'N° 02 · One-of-a-kind Original',
+      price: 775,
+      story: 'An expressive, near-abstract woodland of dark pine branches, dappled light and flickers of lime and pale blue.',
       specs: [
-        { label: 'Medium', value: 'Carbon Pigment Print' },
-        { label: 'Paper', value: 'Canson Infinity Rag Photographique' },
-        { label: 'Framing', value: 'Deep Bevel Matte Charcoal Oak' },
-        { label: 'Dimensions', value: '30 × 40 in (75 × 100 cm)' },
-        { label: 'Location', value: 'Dublin Docklands' },
-        { label: 'Certificate', value: 'Signed, Numbered & Embossed' }
+        { label: 'Medium', value: 'Oil / acrylic on canvas' },
+        { label: 'Base', value: 'Stretched Linen Canvas' },
+        { label: 'Framing', value: 'Framed (natural oak)' },
+        { label: 'Dimensions', value: '30 × 24 in (76 × 61 cm)' }
       ],
-      image: 'images/art-2.svg'
+      image: 'images/through-the-pines.jpg'
     },
     {
       id: 2,
-      title: 'Caelum Silence',
-      edition: 'N° 03 · Limited Edition of 12',
-      price: 460,
-      story: 'A minimalist 8-minute long exposure where sea and sky dissolve into an unbroken horizon. The water becomes glass, holding the faint afterglow of amber twilight.',
+      title: 'Cottages Above the Tide',
+      edition: 'N° 03 · One-of-a-kind Original',
+      price: 945,
+      story: 'White cottages with blue roofs sit on a green headland above dark rocks and a silver Atlantic tide.',
       specs: [
-        { label: 'Medium', value: 'Archival Monochrome Pigment' },
-        { label: 'Paper', value: 'Hahnemühle FineArt Baryta 325gsm' },
-        { label: 'Framing', value: 'Slim Museum Dark Bronze Profile' },
-        { label: 'Dimensions', value: '32 × 32 in (80 × 80 cm)' },
-        { label: 'Location', value: 'Connemara Coast, Ireland' },
-        { label: 'Certificate', value: 'Signed, Numbered & Embossed' }
+        { label: 'Medium', value: 'Oil / acrylic on canvas' },
+        { label: 'Base', value: 'Stretched Linen Canvas' },
+        { label: 'Framing', value: 'Framed (white)' },
+        { label: 'Dimensions', value: '24 × 36 in (61 × 91 cm)' }
       ],
-      image: 'images/art-3.svg'
+      image: 'images/cottages-above-the-tide.jpg'
     },
     {
       id: 3,
-      title: 'Winter Birch & Mist',
-      edition: 'N° 04 · Limited Edition of 20',
-      price: 440,
-      story: 'High-key study of silver birch trees emerging through early morning snow in the Wicklow Mountains. The delicate bark textures stand out against quiet white atmosphere.',
+      title: 'Sunlit Cliffs, West Cork',
+      edition: 'N° 04 · One-of-a-kind Original',
+      price: 875,
+      story: 'Sunlit sandstone cliffs topped with green fall into a deep blue Atlantic under a soft summer sky.',
       specs: [
-        { label: 'Medium', value: 'Platinum-toned Archival Print' },
-        { label: 'Paper', value: 'Awagami Bamboo Japanese Washi' },
-        { label: 'Framing', value: 'Natural Waxed White Oak' },
-        { label: 'Dimensions', value: '22 × 32 in (55 × 80 cm)' },
-        { label: 'Location', value: 'Glendalough Valley, Ireland' },
-        { label: 'Certificate', value: 'Signed, Numbered & Embossed' }
+        { label: 'Medium', value: 'Oil / acrylic on canvas' },
+        { label: 'Base', value: 'Stretched Linen Canvas' },
+        { label: 'Framing', value: 'Framed (natural oak)' },
+        { label: 'Dimensions', value: '32 × 24 in (81 × 61 cm)' }
       ],
-      image: 'images/art-4.svg'
+      image: 'images/sunlit-cliffs-west-cork.jpg'
     },
     {
       id: 4,
-      title: 'Dune Silence',
-      edition: 'N° 05 · Limited Edition of 15',
-      price: 540,
-      story: 'Wind-rippled ridges sculpted into sharp crests. Low golden light rakes across the fine sand, creating an abstract topography of velvet shadow and warm amber glow.',
+      title: 'Koi in Motion',
+      edition: 'N° 05 · One-of-a-kind Original',
+      price: 675,
+      story: 'A koi in orange, black and white glides across warm paper, its tail dissolving into flowing blue.',
       specs: [
-        { label: 'Medium', value: 'UltraChrome Pro Pigment Print' },
-        { label: 'Paper', value: 'Hahnemühle German Etching 310gsm' },
-        { label: 'Framing', value: 'Solid Smoked Oak Shadowbox' },
-        { label: 'Dimensions', value: '28 × 42 in (70 × 105 cm)' },
-        { label: 'Location', value: 'Sahara Erg Chebbi' },
-        { label: 'Certificate', value: 'Signed, Numbered & Embossed' }
+        { label: 'Medium', value: 'Watercolour on paper' },
+        { label: 'Base', value: 'Heavyweight Fine Art Rag' },
+        { label: 'Framing', value: 'Framed (white, with mount)' },
+        { label: 'Dimensions', value: '22 × 30 in (56 × 76 cm)' }
       ],
-      image: 'images/art-5.svg'
+      image: 'images/koi-in-motion.jpg'
     },
     {
       id: 5,
-      title: 'Abyssal Ridge',
-      edition: 'N° 06 · Limited Edition of 15',
-      price: 490,
-      story: 'Volcanic basalt sea stacks towering over freezing North Atlantic swell. Heavy cloud ceiling meets thunderous ocean surf on black volcanic sand.',
+      title: "Willow at the Water's Edge",
+      edition: 'N° 06 · One-of-a-kind Original',
+      price: 695,
+      story: 'A weeping willow leans over still water, glowing in yellow and green washes with deep indigo reflections.',
       specs: [
-        { label: 'Medium', value: 'Archival Monochrome Pigment' },
-        { label: 'Paper', value: 'Hahnemühle Photo Rag 308gsm' },
-        { label: 'Framing', value: 'Matte Jet Black Aluminum' },
-        { label: 'Dimensions', value: '24 × 36 in (60 × 90 cm)' },
-        { label: 'Location', value: 'Reynisdrangar, Iceland' },
-        { label: 'Certificate', value: 'Signed, Numbered & Embossed' }
+        { label: 'Medium', value: 'Watercolour on paper' },
+        { label: 'Base', value: 'Heavyweight Fine Art Rag' },
+        { label: 'Framing', value: 'Framed (natural oak)' },
+        { label: 'Dimensions', value: '30 × 22 in (76 × 56 cm)' }
       ],
-      image: 'images/art-6.svg'
-    },
-    {
-      id: 6,
-      title: 'Obsidian Echo',
-      edition: 'N° 07 · Limited Edition of 10',
-      price: 510,
-      story: 'Angular dark architecture catching the final ember of sunset. The glass curtain wall glows in rich copper against a monolithic silhouette.',
-      specs: [
-        { label: 'Medium', value: 'Carbon Pigment Print' },
-        { label: 'Paper', value: 'Canson Infinity Baryta Prestige' },
-        { label: 'Framing', value: 'Deep Bevel Smoked Ash' },
-        { label: 'Dimensions', value: '28 × 40 in (70 × 100 cm)' },
-        { label: 'Location', value: 'Reykjavik Harbour' },
-        { label: 'Certificate', value: 'Signed, Numbered & Embossed' }
-      ],
-      image: 'images/art-7.svg'
-    },
-    {
-      id: 7,
-      title: 'Silent Tides',
-      edition: 'N° 08 · Limited Edition of 12',
-      price: 470,
-      story: 'A lone wooden mooring timber submerged in glassy tidal waters. Low morning light filters through sea mist, creating a sense of timeless stillness.',
-      specs: [
-        { label: 'Medium', value: 'Platinum-toned Archival Print' },
-        { label: 'Paper', value: 'Hahnemühle FineArt Pearl 285gsm' },
-        { label: 'Framing', value: 'Hand-waxed Raw Black Oak' },
-        { label: 'Dimensions', value: '30 × 30 in (75 × 75 cm)' },
-        { label: 'Location', value: 'Isle of Harris, Scotland' },
-        { label: 'Certificate', value: 'Signed, Numbered & Embossed' }
-      ],
-      image: 'images/art-8.svg'
-    },
-    {
-      id: 8,
-      title: 'Ethereal Canopy',
-      edition: 'N° 09 · Limited Edition of 18',
-      price: 450,
-      story: 'Ancient coastal redwoods shrouded in rising ocean fog. Sunlight pierces the dense canopy in delicate atmospheric rays, illuminating ancient moss and bark.',
-      specs: [
-        { label: 'Medium', value: 'Archival Monochrome Pigment' },
-        { label: 'Paper', value: 'Awagami Unryu Washi' },
-        { label: 'Framing', value: 'Solid Walnut Shadowbox' },
-        { label: 'Dimensions', value: '22 × 34 in (55 × 85 cm)' },
-        { label: 'Location', value: 'Northern California Coast' },
-        { label: 'Certificate', value: 'Signed, Numbered & Embossed' }
-      ],
-      image: 'images/art-9.svg'
-    },
-    {
-      id: 9,
-      title: 'Terra Incognita',
-      edition: 'N° 10 · Limited Edition of 10',
-      price: 560,
-      story: 'Abstract desert ridge crests sculpted by century winds. Razor-sharp contrast between sun-baked apricot sand and deep velvet shadow.',
-      specs: [
-        { label: 'Medium', value: 'UltraChrome Pro Pigment Print' },
-        { label: 'Paper', value: 'Hahnemühle German Etching 310gsm' },
-        { label: 'Framing', value: 'Handcrafted Ebony Wood Profile' },
-        { label: 'Dimensions', value: '30 × 44 in (75 × 110 cm)' },
-        { label: 'Location', value: 'Sossusvlei, Namibia' },
-        { label: 'Certificate', value: 'Signed, Numbered & Embossed' }
-      ],
-      image: 'images/art-10.svg'
+      image: 'images/willow-at-the-waters-edge.jpg'
     }
   ];
 
-  // 10 Staggered Salon Wall Coordinates (Preceded by Intro Panel with Tight Connected Spacing)
+  // 6 Staggered Salon Wall Coordinates (Preceded by Intro Panel with Tight Connected Spacing)
   const LAYOUTS = {
     desk: [
-      { nailX: 17.5, nailY: 13.5, wireH: 52, frameW: 320, frameH: 450 }, // 0: Portrait
-      { nailX: 26.2, nailY: 17.5, wireH: 46, frameW: 460, frameH: 330 }, // 1: Landscape
-      { nailX: 34.9, nailY: 13.8, wireH: 50, frameW: 360, frameH: 360 }, // 2: Square
-      { nailX: 43.6, nailY: 17.2, wireH: 46, frameW: 320, frameH: 455 }, // 3: Portrait
-      { nailX: 52.3, nailY: 13.5, wireH: 50, frameW: 460, frameH: 330 }, // 4: Landscape
-      { nailX: 61.0, nailY: 17.5, wireH: 46, frameW: 320, frameH: 450 }, // 5: Portrait
-      { nailX: 69.7, nailY: 13.8, wireH: 50, frameW: 465, frameH: 330 }, // 6: Landscape
-      { nailX: 78.4, nailY: 17.2, wireH: 46, frameW: 360, frameH: 360 }, // 7: Square
-      { nailX: 87.1, nailY: 13.5, wireH: 52, frameW: 320, frameH: 450 }, // 8: Portrait
-      { nailX: 95.8, nailY: 17.5, wireH: 46, frameW: 460, frameH: 330 }  // 9: Landscape
+      { nailX: 18.0, nailY: 17.2, wireH: 46, frameW: 460, frameH: 335 }, // 0: Landscape
+      { nailX: 33.0, nailY: 13.5, wireH: 52, frameW: 330, frameH: 435 }, // 1: Portrait
+      { nailX: 49.0, nailY: 17.5, wireH: 46, frameW: 460, frameH: 335 }, // 2: Landscape
+      { nailX: 65.0, nailY: 13.8, wireH: 50, frameW: 335, frameH: 430 }, // 3: Portrait
+      { nailX: 81.0, nailY: 17.2, wireH: 46, frameW: 460, frameH: 335 }, // 4: Landscape
+      { nailX: 96.0, nailY: 13.5, wireH: 52, frameW: 325, frameH: 435 }  // 5: Portrait
     ],
     mob: [
-      { nailX: 12.0, nailY: 13.5, wireH: 36, frameW: 235, frameH: 340 }, // 0: Portrait
-      { nailX: 21.3, nailY: 17.0, wireH: 32, frameW: 295, frameH: 215 }, // 1: Landscape
-      { nailX: 30.6, nailY: 13.8, wireH: 34, frameW: 255, frameH: 255 }, // 2: Square
-      { nailX: 39.9, nailY: 16.8, wireH: 32, frameW: 235, frameH: 345 }, // 3: Portrait
-      { nailX: 49.2, nailY: 13.5, wireH: 34, frameW: 295, frameH: 215 }, // 4: Landscape
-      { nailX: 58.5, nailY: 17.0, wireH: 32, frameW: 235, frameH: 340 }, // 5: Portrait
-      { nailX: 67.8, nailY: 13.8, wireH: 34, frameW: 295, frameH: 215 }, // 6: Landscape
-      { nailX: 77.0, nailY: 16.8, wireH: 32, frameW: 255, frameH: 255 }, // 7: Square
-      { nailX: 86.2, nailY: 13.5, wireH: 34, frameW: 235, frameH: 340 }, // 8: Portrait
-      { nailX: 95.4, nailY: 17.0, wireH: 32, frameW: 295, frameH: 215 }  // 9: Landscape
+      { nailX: 16.0, nailY: 17.0, wireH: 32, frameW: 295, frameH: 215 }, // 0: Landscape
+      { nailX: 32.0, nailY: 13.5, wireH: 36, frameW: 245, frameH: 320 }, // 1: Portrait
+      { nailX: 48.0, nailY: 17.0, wireH: 32, frameW: 295, frameH: 215 }, // 2: Landscape
+      { nailX: 64.0, nailY: 13.8, wireH: 34, frameW: 245, frameH: 315 }, // 3: Portrait
+      { nailX: 80.0, nailY: 16.8, wireH: 32, frameW: 295, frameH: 215 }, // 4: Landscape
+      { nailX: 96.0, nailY: 13.5, wireH: 34, frameW: 240, frameH: 320 }  // 5: Portrait
     ]
   };
 
@@ -878,8 +794,8 @@
 
     // Staggered high and low starting levels matching the 5-strip curtain rhythm
     const introTravelY = mob ? -55 : -75;
-    const frameOffsetsDesk = [-155, -80, -165, -85, -145, -75, -160, -85, -150, -80];
-    const frameOffsetsMob = [-115, -60, -120, -65, -110, -55, -115, -65, -110, -60];
+    const frameOffsetsDesk = [-80, -155, -85, -165, -75, -145];
+    const frameOffsetsMob = [-60, -115, -65, -120, -55, -110];
     const frameOffsets = mob ? frameOffsetsMob : frameOffsetsDesk;
 
     // Reset initial states
