@@ -364,7 +364,8 @@
       clearSpotlight();
     });
 
-    unit.addEventListener('click', () => {
+    unit.addEventListener('click', (e) => {
+      e.stopPropagation();
       if (isBusy || hasDraggedSignificantly) return;
       zoomIntoArtwork(idx);
     });
@@ -462,6 +463,18 @@
     { passive: false }
   );
 
+  // Delegated click handler on hangersContainer as bulletproof backup
+  hangersContainer.addEventListener('click', (e) => {
+    if (isBusy || hasDraggedSignificantly) return;
+    const unit = e.target.closest('.hanger-unit');
+    if (unit && unit.dataset.index !== undefined) {
+      const idx = parseInt(unit.dataset.index, 10);
+      if (!isNaN(idx)) {
+        zoomIntoArtwork(idx);
+      }
+    }
+  });
+
   // Pointer Dragging with High-Mass Cinematic Fling Physics (Supports both Natural Vertical Scroll & Horizontal Slider on Mobile)
   let isDragging = false;
   let dragStartX = 0;
@@ -483,10 +496,8 @@
     pointerHistory.length = 0;
     pointerHistory.push({ x: e.clientX, y: e.clientY, t: performance.now() });
     document.body.classList.add('is-dragging');
-
-    try {
-      world.setPointerCapture(e.pointerId);
-    } catch (_) {}
+    // Note: Do not call setPointerCapture on pointerdown! That retargets pointerup & click to world,
+    // which prevents the click event from firing on individual picture frames.
   });
 
   window.addEventListener('pointermove', (e) => {
@@ -498,7 +509,15 @@
     const absDy = Math.abs(dy);
 
     if (absDx > 6 || absDy > 6) {
-      hasDraggedSignificantly = true;
+      if (!hasDraggedSignificantly) {
+        hasDraggedSignificantly = true;
+        // Acquire pointer capture only once actual dragging motion has begun
+        if (e && e.pointerId) {
+          try {
+            world.setPointerCapture(e.pointerId);
+          } catch (_) {}
+        }
+      }
     }
 
     // Determine gesture axis once movement threshold is reached (supports natural vertical mobile scroll as well as horizontal slider)
@@ -522,12 +541,14 @@
 
     if (e && e.pointerId) {
       try {
-        world.releasePointerCapture(e.pointerId);
+        if (world.hasPointerCapture && world.hasPointerCapture(e.pointerId)) {
+          world.releasePointerCapture(e.pointerId);
+        }
       } catch (_) {}
     }
 
     // Calculate release velocity for natural, restrained cinematic fling
-    if (pointerHistory.length >= 2) {
+    if (pointerHistory.length >= 2 && hasDraggedSignificantly) {
       const first = pointerHistory[0];
       const last = pointerHistory[pointerHistory.length - 1];
       const dt = last.t - first.t;
@@ -542,6 +563,11 @@
       }
     }
     dragAxis = null;
+
+    // Reset hasDraggedSignificantly after click event loop resolves
+    setTimeout(() => {
+      hasDraggedSignificantly = false;
+    }, 120);
   }
 
   window.addEventListener('pointerup', endDrag);
@@ -577,6 +603,7 @@
     // Ensure sheet is pre-mounted with opacity 0 and translateY before animation starts
     sheet.classList.remove('show');
     sheet.hidden = false;
+    sheet.removeAttribute('hidden');
 
     fillCuratorSheet(idx);
 
@@ -649,6 +676,7 @@
     sheet.classList.remove('show');
     await wait(220);
     sheet.hidden = true;
+    sheet.setAttribute('hidden', '');
 
     // Center the recently inspected artwork on screen upon return
     const mode = currentMode || 'desk';

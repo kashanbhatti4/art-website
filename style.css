@@ -274,7 +274,8 @@ body.in-detail .gallery-intro {
   /* Anchor Point: The Nail Head */
   will-change: transform;
   transition: transform 0.8s var(--ease-smooth);
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 /* Idle ambient breathing drift */
@@ -342,6 +343,8 @@ body.in-detail .gallery-intro {
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .frame-molding {
